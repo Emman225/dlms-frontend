@@ -1,0 +1,11 @@
+@use "../bootstrap/variables";
+
+//
+// Pagination
+// --------------------------------------------------
+
+.page-link {
+  font-weight: variables.$font-weight-semibold;
+  border-width: 0 0 variables.$pagination-border-width 0;
+  border-radius: 0 !important;
+}

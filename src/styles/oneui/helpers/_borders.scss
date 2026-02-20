@@ -1,0 +1,12 @@
+@use "../../bootstrap/variables";
+
+//
+// Borders
+// --------------------------------------------------
+
+.border-white-op {
+  border-color: rgba(variables.$white, 0.1) !important;
+}
+.border-black-op {
+  border-color: rgba(variables.$black, 0.1) !important;
+}

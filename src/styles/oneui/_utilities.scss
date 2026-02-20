@@ -1,0 +1,56 @@
+@use "sass:map";
+@use "../bootstrap/utilities";
+@use "../bootstrap/variables";
+@use "variables-bootstrap";
+
+// Utilities
+
+variables.$font-sizes: map.merge(
+  variables.$font-sizes,
+  (
+    'base': variables.$font-size-base,
+    'xs': variables-bootstrap.$font-size-xs,
+    'sm': variables.$font-size-sm,
+    'lg': variables.$font-size-lg
+  )
+);
+
+// Override utilities map to add new classes
+utilities.$utilities: map.merge(
+  utilities.$utilities,
+  (
+    "font-weight": (
+      property: font-weight,
+      class: fw,
+      values: (
+        light: variables.$font-weight-light,
+        lighter: variables.$font-weight-lighter,
+        normal: variables.$font-weight-normal,
+        medium: variables.$font-weight-medium,
+        semibold: variables.$font-weight-semibold,
+        bold: variables.$font-weight-bold,
+        bolder: variables.$font-weight-bolder,
+        extrabold: 800,
+        black: 900,
+      )
+    ),
+    "font-size": (
+      rfs: true,
+      property: font-size,
+      class: fs,
+      values: variables.$font-sizes
+    ),
+    "letter-spacing": (
+      property: letter-spacing,
+      class: tracking,
+      values: (
+        tighter: -0.05em,
+        tight: -0.025em,
+        normal: 0,
+        wide: 0.025em,
+        wider: 0.05em,
+        widest: 0.1em
+      )
+    ),
+  )
+);

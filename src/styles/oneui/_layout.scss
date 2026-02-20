@@ -1,0 +1,83 @@
+@use "../bootstrap/mixins/breakpoints";
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "mixins/content";
+@use "variables" as oneui-variables;
+
+//
+// Layout
+// --------------------------------------------------
+
+// Main Structure
+#page-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: bootstrap-variables.$light;
+}
+
+#page-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content: "";
+  background-color: rgba(bootstrap-variables.$black, 0.6);
+  z-index: oneui-variables.$zindex-page-overlay;
+  opacity: 0;
+  transition: opacity oneui-variables.$side-transition;
+  transform: translateY(-100%);
+
+  @include breakpoints.media-breakpoint-up(lg) {
+    .side-overlay-o.enable-page-overlay & {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+#main-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  max-width: 100%;
+}
+
+// Main Content
+.content {
+  @include content.content-layout(oneui-variables.$space-mobile, oneui-variables.$space-mobile);
+
+  @include breakpoints.media-breakpoint-up(md) {
+    @include content.content-layout(oneui-variables.$space-base, oneui-variables.$space-base);
+  }
+
+  @include breakpoints.media-breakpoint-up(xl) {
+    &.content-narrow {
+      width: oneui-variables.$space-narrow !important;
+    }
+  }
+
+  &.content-boxed {
+    max-width: oneui-variables.$space-boxed !important;
+  }
+
+  &.content-top {
+    padding-top: oneui-variables.$header-height + oneui-variables.$space-mobile;
+
+    @include breakpoints.media-breakpoint-up(lg) {
+      padding-top: oneui-variables.$header-height + oneui-variables.$space-base;
+    }
+  }
+}
+
+.content-section-top {
+  padding-top: oneui-variables.$header-height;
+}
+
+// Side Content
+.content-side {
+  @include content.content-layout(oneui-variables.$space-side, oneui-variables.$space-side, hidden);
+}

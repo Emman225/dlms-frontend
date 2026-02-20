@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "../../bootstrap/mixins/gradients";
+
+@mixin alert-variant($background, $border, $color, $shadow: true) {
+  color: $color;
+  @include gradients.gradient-bg($background);
+  border-color: $border;
+  box-shadow: none;
+
+  hr {
+    border-top-color: color.adjust($border, $lightness: -5%);
+  }
+
+  .alert-link {
+    color: color.adjust($color, $lightness: -10%);
+  }
+}

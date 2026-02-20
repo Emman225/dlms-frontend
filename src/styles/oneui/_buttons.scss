@@ -1,0 +1,53 @@
+@use "sass:color";
+@use "../bootstrap/functions";
+@use "../bootstrap/mixins/buttons";
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "variables" as oneui-variables;
+
+//
+// Buttons
+// --------------------------------------------------
+
+// Fix simple icon position
+.btn .si {
+  position: relative;
+  top: 1px;
+}
+
+// Variant buttons
+.btn-secondary {
+  @include buttons.button-variant(oneui-variables.$primary-dark, oneui-variables.$primary-dark);
+}
+
+// Alternate variant buttons
+.btn-alt-primary {
+  @include buttons.button-variant(functions.tint-color(bootstrap-variables.$primary, 75%), functions.tint-color(bootstrap-variables.$primary, 75%), functions.shade-color(bootstrap-variables.$primary, 40%), functions.tint-color(bootstrap-variables.$primary, 50%), functions.tint-color(bootstrap-variables.$primary, 50%), functions.shade-color(bootstrap-variables.$primary, 60%));
+}
+
+.btn-alt-secondary {
+  @include buttons.button-variant(bootstrap-variables.$light, bootstrap-variables.$light, oneui-variables.$body-color-dark, functions.shade-color(bootstrap-variables.$light, 10%), functions.shade-color(bootstrap-variables.$light, 10%), functions.shade-color(oneui-variables.$body-color-dark, 15%));
+}
+
+.btn-alt-success {
+  @include buttons.button-variant(functions.tint-color(bootstrap-variables.$success, 75%), functions.tint-color(bootstrap-variables.$success, 75%), functions.shade-color(bootstrap-variables.$success, 40%), functions.tint-color(bootstrap-variables.$success, 50%), functions.tint-color(bootstrap-variables.$success, 50%), functions.shade-color(bootstrap-variables.$success, 60%));
+}
+
+.btn-alt-info {
+  @include buttons.button-variant(functions.tint-color(bootstrap-variables.$info, 75%), functions.tint-color(bootstrap-variables.$info, 75%), functions.shade-color(bootstrap-variables.$info, 40%), functions.tint-color(bootstrap-variables.$info, 50%), functions.tint-color(bootstrap-variables.$info, 50%), functions.shade-color(bootstrap-variables.$info, 60%));
+}
+
+.btn-alt-warning {
+  @include buttons.button-variant(functions.tint-color(bootstrap-variables.$warning, 75%), functions.tint-color(bootstrap-variables.$warning, 75%), functions.shade-color(bootstrap-variables.$warning, 40%), functions.tint-color(bootstrap-variables.$warning, 50%), functions.tint-color(bootstrap-variables.$warning, 50%), functions.shade-color(bootstrap-variables.$warning, 60%));
+}
+
+.btn-alt-danger {
+  @include buttons.button-variant(functions.tint-color(bootstrap-variables.$danger, 75%), functions.tint-color(bootstrap-variables.$danger, 75%), functions.shade-color(bootstrap-variables.$danger, 40%), functions.tint-color(bootstrap-variables.$danger, 50%), functions.tint-color(bootstrap-variables.$danger, 50%), functions.shade-color(bootstrap-variables.$danger, 60%));
+}
+
+// Alternate secondary adapts on dark header/sidebar
+.page-header-dark #page-header .btn-alt-secondary,
+.sidebar-dark #sidebar .btn-alt-secondary,
+html.dark #page-header .btn-alt-secondary,
+html.dark #sidebar .btn-alt-secondary {
+  @include buttons.button-variant(color.adjust(oneui-variables.$primary-darker, $lightness: 5%), color.adjust(oneui-variables.$primary-darker, $lightness: 5%), bootstrap-variables.$white, color.adjust(oneui-variables.$primary-darker, $lightness: -5%), color.adjust(oneui-variables.$primary-darker, $lightness: -5%), bootstrap-variables.$white);
+}

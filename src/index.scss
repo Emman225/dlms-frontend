@@ -1,0 +1,9 @@
+/* Import des styles SCSS OneUI/Bootstrap copiés depuis le projet Laravel */
+// Sass @use MUST come before any other rules/imports
+@use "./styles/main.scss";
+@use "./styles/custom/overrides";
+
+// Local icon fonts (install with: npm i @fortawesome/fontawesome-free simple-line-icons)
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import '@fortawesome/fontawesome-free/css/v4-shims.min.css';
+@import 'simple-line-icons/css/simple-line-icons.css';

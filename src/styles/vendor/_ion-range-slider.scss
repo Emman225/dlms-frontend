@@ -1,0 +1,33 @@
+@use "../bootstrap/variables";
+
+//
+// Ion Range Slider
+//
+// Overwrite/Extend styles
+// --------------------------------------------------
+
+.irs.irs--round {
+  .irs-min,
+  .irs-max,
+  .irs-line,
+  .irs-grid-pol {
+    background: variables.$light;
+  }
+
+  .irs-handle {
+    border-color: variables.$primary;
+  }
+
+  .irs-from:before,
+  .irs-to:before,
+  .irs-single:before {
+    border-top-color: variables.$primary;
+  }
+
+  .irs-bar,
+  .irs-from,
+  .irs-to,
+  .irs-single {
+    background: variables.$primary;
+  }
+}

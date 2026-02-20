@@ -1,0 +1,102 @@
+@use "../../bootstrap/variables" as bootstrap-variables;
+@use "../mixins/text-emphasis";
+@use "../variables" as oneui-variables;
+@use "../variables-themes";
+
+//
+// Text
+// --------------------------------------------------
+
+// Transformation
+.text-normal {
+  text-transform: none !important;
+}
+
+// Contextual colors
+@include text-emphasis.text-emphasis-variant(".text-primary", bootstrap-variables.$primary);
+@include text-emphasis.text-emphasis-variant(".text-primary-dark", oneui-variables.$primary-dark);
+@include text-emphasis.text-emphasis-variant(".text-primary-darker", oneui-variables.$primary-darker);
+@include text-emphasis.text-emphasis-variant(".text-primary-light", oneui-variables.$primary-light);
+@include text-emphasis.text-emphasis-variant(".text-primary-lighter", oneui-variables.$primary-lighter);
+
+@include text-emphasis.text-emphasis-variant(".text-success", bootstrap-variables.$success);
+@include text-emphasis.text-emphasis-variant(".text-success-light", oneui-variables.$success-light);
+@include text-emphasis.text-emphasis-variant(".text-warning", bootstrap-variables.$warning);
+@include text-emphasis.text-emphasis-variant(".text-warning-light", oneui-variables.$warning-light);
+@include text-emphasis.text-emphasis-variant(".text-info", bootstrap-variables.$info);
+@include text-emphasis.text-emphasis-variant(".text-info-light", oneui-variables.$info-light);
+@include text-emphasis.text-emphasis-variant(".text-danger", bootstrap-variables.$danger);
+@include text-emphasis.text-emphasis-variant(".text-danger-light", oneui-variables.$danger-light);
+
+@include text-emphasis.text-emphasis-variant(".text-body-bg", bootstrap-variables.$light);
+@include text-emphasis.text-emphasis-variant(".text-body-bg-dark", oneui-variables.$body-bg-dark);
+@include text-emphasis.text-emphasis-variant(".text-body-bg-light", oneui-variables.$body-bg-light);
+@include text-emphasis.text-emphasis-variant(".text-body-color", bootstrap-variables.$body-color);
+@include text-emphasis.text-emphasis-variant(".text-body-color-dark", oneui-variables.$body-color-dark);
+@include text-emphasis.text-emphasis-variant(".text-body-color-light", oneui-variables.$body-color-light);
+
+@include text-emphasis.text-emphasis-variant(".text-muted", bootstrap-variables.$text-muted);
+@include text-emphasis.text-emphasis-variant(".text-white", bootstrap-variables.$white);
+@include text-emphasis.text-emphasis-variant(".text-white-50", rgba(bootstrap-variables.$white, 0.5));
+@include text-emphasis.text-emphasis-variant(".text-white-75", rgba(bootstrap-variables.$white, 0.75));
+@include text-emphasis.text-emphasis-variant(".text-black", bootstrap-variables.$black);
+@include text-emphasis.text-emphasis-variant(".text-black-50", rgba(bootstrap-variables.$black, 0.5));
+@include text-emphasis.text-emphasis-variant(".text-black-75", rgba(bootstrap-variables.$black, 0.75));
+
+@include text-emphasis.text-emphasis-variant(".text-gray", bootstrap-variables.$gray-400);
+@include text-emphasis.text-emphasis-variant(".text-gray-dark", bootstrap-variables.$gray-600);
+@include text-emphasis.text-emphasis-variant(".text-gray-darker", bootstrap-variables.$gray-800);
+@include text-emphasis.text-emphasis-variant(".text-gray-light", bootstrap-variables.$gray-200);
+@include text-emphasis.text-emphasis-variant(".text-gray-lighter", bootstrap-variables.$gray-100);
+
+// Contextual dual text colors (for dark header/sidebar)
+@include text-emphasis.text-emphasis-variant(".text-dual", oneui-variables.$primary-dark);
+
+.page-header-dark #page-header,
+.sidebar-dark #sidebar,
+html.dark #page-header,
+html.dark #sidebar {
+  @include text-emphasis.text-emphasis-variant(".text-dual", oneui-variables.$body-color-light);
+}
+
+// Default Color Theme
+@include text-emphasis.text-emphasis-variant(".text-default", bootstrap-variables.$primary);
+@include text-emphasis.text-emphasis-variant(".text-default-dark", oneui-variables.$primary-dark);
+@include text-emphasis.text-emphasis-variant(".text-default-darker", oneui-variables.$primary-darker);
+@include text-emphasis.text-emphasis-variant(".text-default-light", oneui-variables.$primary-light);
+@include text-emphasis.text-emphasis-variant(".text-default-lighter", oneui-variables.$primary-lighter);
+
+// Amethyst Color Theme
+@include text-emphasis.text-emphasis-variant(".text-amethyst", variables-themes.$theme-amethyst-primary);
+@include text-emphasis.text-emphasis-variant(".text-amethyst-dark", variables-themes.$theme-amethyst-dark);
+@include text-emphasis.text-emphasis-variant(".text-amethyst-darker", variables-themes.$theme-amethyst-darker);
+@include text-emphasis.text-emphasis-variant(".text-amethyst-light", variables-themes.$theme-amethyst-light);
+@include text-emphasis.text-emphasis-variant(".text-amethyst-lighter", variables-themes.$theme-amethyst-lighter);
+
+// City Color Theme
+@include text-emphasis.text-emphasis-variant(".text-city", variables-themes.$theme-city-primary);
+@include text-emphasis.text-emphasis-variant(".text-city-dark", variables-themes.$theme-city-dark);
+@include text-emphasis.text-emphasis-variant(".text-city-darker", variables-themes.$theme-city-darker);
+@include text-emphasis.text-emphasis-variant(".text-city-light", variables-themes.$theme-city-light);
+@include text-emphasis.text-emphasis-variant(".text-city-lighter", variables-themes.$theme-city-lighter);
+
+// Flat Color Theme
+@include text-emphasis.text-emphasis-variant(".text-flat", variables-themes.$theme-flat-primary);
+@include text-emphasis.text-emphasis-variant(".text-flat-dark", variables-themes.$theme-flat-dark);
+@include text-emphasis.text-emphasis-variant(".text-flat-darker", variables-themes.$theme-flat-darker);
+@include text-emphasis.text-emphasis-variant(".text-flat-light", variables-themes.$theme-flat-light);
+@include text-emphasis.text-emphasis-variant(".text-flat-lighter", variables-themes.$theme-flat-lighter);
+
+// Modern Color Theme
+@include text-emphasis.text-emphasis-variant(".text-modern", variables-themes.$theme-modern-primary);
+@include text-emphasis.text-emphasis-variant(".text-modern-dark", variables-themes.$theme-modern-dark);
+@include text-emphasis.text-emphasis-variant(".text-modern-darker", variables-themes.$theme-modern-darker);
+@include text-emphasis.text-emphasis-variant(".text-modern-light", variables-themes.$theme-modern-light);
+@include text-emphasis.text-emphasis-variant(".text-modern-lighter", variables-themes.$theme-modern-lighter);
+
+// Smooth Color Theme
+@include text-emphasis.text-emphasis-variant(".text-smooth", variables-themes.$theme-smooth-primary);
+@include text-emphasis.text-emphasis-variant(".text-smooth-dark", variables-themes.$theme-smooth-dark);
+@include text-emphasis.text-emphasis-variant(".text-smooth-darker", variables-themes.$theme-smooth-darker);
+@include text-emphasis.text-emphasis-variant(".text-smooth-light", variables-themes.$theme-smooth-light);
+@include text-emphasis.text-emphasis-variant(".text-smooth-lighter", variables-themes.$theme-smooth-lighter);

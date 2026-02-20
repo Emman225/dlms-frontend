@@ -1,0 +1,10 @@
+@use "../variables";
+
+//
+// Input Group
+// --------------------------------------------------
+
+.input-group-text.input-group-text-alt {
+  background-color: variables.$body-bg-dark;
+  border-color: variables.$body-bg-dark;
+}

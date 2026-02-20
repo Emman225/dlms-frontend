@@ -1,0 +1,54 @@
+@use "../bootstrap/mixins/breakpoints";
+@use "../bootstrap/variables";
+
+//
+// Typography
+// --------------------------------------------------
+
+.content-heading {
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  font-size: variables.$font-size-sm;
+  font-weight: variables.$font-weight-semibold;
+  color: variables.$gray-600;
+  line-height: 1.75;
+  text-transform: uppercase;
+  letter-spacing: 0.0625rem;
+
+  small {
+    margin-top: 0.25rem;
+    font-size: variables.$font-size-sm;
+    font-weight: 400;
+    color: variables.$gray-600;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  @include breakpoints.media-breakpoint-up(md) {
+    padding-top: 1.5rem;
+
+    small {
+      margin-top: 0;
+    }
+  }
+
+  .block-content > &:first-child,
+  .content > &:first-child {
+    padding-top: 0 !important;
+  }
+
+  .dropdown {
+    line-height: variables.$line-height-base;
+  }
+}
+
+// Emphasis
+small,
+.small {
+  font-weight: inherit;
+}
+
+// Transformations
+.text-uppercase {
+  letter-spacing: 0.0625em;
+}

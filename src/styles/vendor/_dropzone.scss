@@ -1,0 +1,32 @@
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "../oneui/variables" as oneui-variables;
+
+//
+// Dropzone
+//
+// Overwrite/Extend styles
+// --------------------------------------------------
+
+.dropzone {
+  min-height: 200px;
+  background-color: oneui-variables.$body-bg-light;
+  border: 0.125rem dashed bootstrap-variables.$input-border-color;
+  border-radius: bootstrap-variables.$border-radius-lg;
+
+  .dz-message {
+    margin: 4rem 0;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: bootstrap-variables.$font-weight-bold;
+    color: bootstrap-variables.$body-color;
+  }
+
+  &:hover {
+    background-color: bootstrap-variables.$white;
+    border-color: bootstrap-variables.$primary;
+
+    .dz-message {
+      color: bootstrap-variables.$primary;
+    }
+  }
+}

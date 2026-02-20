@@ -1,0 +1,24 @@
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "mixins/theme-dark";
+@use "variables" as oneui-variables;
+
+//
+// Dark Mode
+// --------------------------------------------------
+
+// Default Dark mode
+@include theme-dark.color-theme-dark(
+  bootstrap-variables.$primary,
+  oneui-variables.$primary-light,
+  oneui-variables.$primary-lighter,
+  oneui-variables.$primary-dark,
+  oneui-variables.$primary-darker,
+  bootstrap-variables.$light,
+  oneui-variables.$body-bg-dark,
+  oneui-variables.$body-bg-light,
+  bootstrap-variables.$body-color,
+  oneui-variables.$body-color-dark,
+  oneui-variables.$body-color-light,
+  bootstrap-variables.$link-color,
+  bootstrap-variables.$link-hover-color,
+);

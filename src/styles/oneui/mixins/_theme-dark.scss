@@ -1,0 +1,1161 @@
+@use "sass:color";
+@use "../../bootstrap/functions";
+@use "../../bootstrap/mixins/breakpoints";
+@use "../../bootstrap/mixins/buttons";
+@use "../../bootstrap/mixins/forms";
+@use "../../bootstrap/mixins/table-variants";
+@use "../../bootstrap/variables";
+@use "alert";
+@use "background-variant";
+@use "text-emphasis";
+
+//
+// Dark Mode Theme
+// --------------------------------------------------
+
+@mixin color-theme-dark(
+  $primary,
+  $primary-light,
+  $primary-lighter,
+  $primary-dark,
+  $primary-darker,
+  $body-bg,
+  $body-bg-dark,
+  $body-bg-light,
+  $body-color,
+  $body-color-dark,
+  $body-color-light,
+  $link-color,
+  $link-hover-color
+) {
+  html.dark {
+    // Main Structure
+    &,
+    #page-container,
+    #side-overlay,
+    #page-loader {
+      background-color: color.adjust($primary-darker, $lightness: -3%);
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+    }
+
+    // Typography
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+      color: $body-bg-dark;
+    }
+
+    .content-heading,
+    .content-heading small {
+      color: color.adjust($body-bg-light, $lightness: -30%);
+    }
+
+    hr {
+      border-top-color: color.adjust($primary-darker, $lightness: 6%);
+    }
+
+    code {
+      color: variables.$pink-300;
+    }
+
+    .story p,
+    p.story {
+      color: color.adjust($body-bg-dark, $lightness: -20%);
+    }
+
+    // Links
+    a:not(.mini-nav-item):not(.badge):not(.btn):not(.btn-block-option):not(
+        .block
+      ):not(.dropdown-item):not(.nav-link):not(.page-link):not(.alert-link):not(
+        .nav-main-link
+      ):not(.list-group-item-action):not(.close):not(.fc-event):not(
+        .text-success-light
+      ):not(.text-danger-light):not(.text-warning-light):not(.text-info-light) {
+      color: color.adjust($primary, $lightness: 12%);
+
+      &.link-fx::before {
+        background-color: color.adjust($primary, $lightness: 12%);
+      }
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    // Contextual background colors
+    @include background-variant.bg-variant(".bg-body", color.adjust($primary-darker, $lightness: -3%));
+    @include background-variant.bg-variant(".bg-body-light", color.adjust($primary-darker, $lightness: 3%));
+    @include background-variant.bg-variant(".bg-body-dark", color.adjust($primary-darker, $lightness: -4.5%));
+    @include background-variant.bg-variant(".bg-body-extra-light", $primary-darker);
+    @include background-variant.bg-variant(".bg-muted", color.adjust($body-bg-light, $lightness: -30%));
+
+    // Contextual text colors
+    @include text-emphasis.text-emphasis-variant(".text-primary", color.adjust($primary, $lightness: 12%));
+
+    @include text-emphasis.text-emphasis-variant(".text-success", color.adjust(variables.$success, $lightness: 5%));
+    @include text-emphasis.text-emphasis-variant(".text-warning", color.adjust(variables.$warning, $lightness: 5%));
+    @include text-emphasis.text-emphasis-variant(".text-info", color.adjust(variables.$info, $lightness: 5%));
+    @include text-emphasis.text-emphasis-variant(".text-danger", color.adjust(variables.$danger, $lightness: 5%));
+
+    @include text-emphasis.text-emphasis-variant(".text-body-bg", color.adjust($primary-darker, $lightness: -3%));
+    @include text-emphasis.text-emphasis-variant(".text-body-bg-dark", color.adjust($primary-darker, $lightness: -6%));
+    @include text-emphasis.text-emphasis-variant(".text-body-bg-light", color.adjust($primary-darker, $lightness: 3%));
+    @include text-emphasis.text-emphasis-variant(".text-body-color", color.adjust($body-bg-dark, $lightness: -10%));
+    @include text-emphasis.text-emphasis-variant(".text-body-color-dark", color.adjust($body-bg-dark, $lightness: -20%));
+    @include text-emphasis.text-emphasis-variant(".text-body-color-light", $body-bg-dark);
+
+    @include text-emphasis.text-emphasis-variant(".text-dark", color.adjust($body-bg-dark, $lightness: -20%));
+
+    @include text-emphasis.text-emphasis-variant(".text-muted", color.adjust($body-bg-light, $lightness: -30%));
+    
+    // Buttons
+    .btn-secondary,
+    .btn-alt-secondary {
+      @include buttons.button-variant(color.adjust($primary-darker, $lightness: 5%), color.adjust($primary-darker, $lightness: 5%), variables.$white, color.adjust($primary-darker, $lightness: -5%), color.adjust($primary-darker, $lightness: -5%), variables.$white);
+    }
+
+    // Nav links
+    .nav-link {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+
+      &:hover,
+      &:focus {
+        color: $primary;
+      }
+    }
+
+    // Nav Pills
+    .nav-pills {
+      .nav-link {
+        color: color.adjust($body-bg-dark, $lightness: -30%);
+
+        &:hover,
+        &:focus {
+          background-color: color.adjust($primary-darker, $lightness: 8%);
+        }
+      }
+
+      .nav-link.active,
+      .show > .nav-link {
+        color: variables.$white;
+        background-color: $primary;
+      }
+    }
+
+    // Nav Tabs
+    .nav-tabs {
+      border-bottom-color: color.adjust($primary-darker, $lightness: 6%);
+
+      .nav-link {
+        &:hover,
+        &:focus {
+          border-color: color.adjust($primary-darker, $lightness: 6%) color.adjust($primary-darker, $lightness: 6%) color.adjust($primary-darker, $lightness: 6%);
+        }
+      }
+
+      .nav-link.active,
+      .nav-item.show .nav-link {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: transparent;
+        border-color: color.adjust($primary-darker, $lightness: 6%) color.adjust($primary-darker, $lightness: 6%) $primary-darker;
+      }
+    }
+
+    // Tabs block variation
+    .nav-tabs-block {
+      background-color: color.adjust($primary-darker, $lightness: 6%);
+
+      .nav-link {
+        border-color: transparent;
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+
+        &:hover,
+        &:focus {
+          color: $primary;
+          background-color: color.adjust($primary-darker, $lightness: 3%);
+          border-color: transparent;
+        }
+      }
+
+      .nav-link.active,
+      .nav-item.show .nav-link {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: $primary-darker;
+        border-color: transparent;
+      }
+    }
+
+    // Tabs block alternative variation
+    .nav-tabs-alt {
+      border-bottom-color: color.adjust($primary-darker, $lightness: 3%);
+
+      .nav-link {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: transparent;
+        border-color: transparent;
+
+        &:hover,
+        &:focus {
+          color: $primary;
+          background-color: transparent;
+          border-color: transparent;
+          box-shadow: inset 0 -3px $primary;
+        }
+      }
+
+      .nav-link.active,
+      .nav-item.show .nav-link {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: inset 0 -3px $primary;
+      }
+    }
+
+    // Various Items Navigation
+    .nav-items {
+      a {
+        &:hover {
+          background-color: color.adjust($primary-darker, $lightness: 8%);
+        }
+    
+        &:active {
+          background-color: transparent;
+        }
+      }
+    
+      > li:not(:last-child) > a {
+        border-bottom-color: color.adjust($primary-darker, $lightness: 6%);
+      }
+    }
+
+    // Cards
+    .card {
+      background-color: $primary-darker;
+
+      &.card-borderless {
+        box-shadow: 0 1px 2px rgba(color.adjust($primary-darker, $lightness: -4%), .5), 0 1px 2px rgba(color.adjust($primary-darker, $lightness: -4%), .5);
+      }
+
+      > .card-header:not(.bg-transparent),
+      > .card-footer:not(.bg-transparent) {
+        background-color: color.adjust($primary-darker, $lightness: 6%);
+      }
+
+      > .card-header:not(.border-bottom-0),
+      > .card-footer:not(.border-top-0) {
+        border-color: color.adjust($primary-darker, $lightness: 6%);
+      }
+
+      &:not(.card-borderless) {
+        &,
+        > .card-header {
+          border-color: color.adjust($primary-darker, $lightness: 6%);
+        }
+      }
+
+      > .card-header .block-title small {
+        color: color.adjust($body-bg-light, $lightness: -30%);
+      }
+    }
+
+    // Pagination
+    .page-link {
+      color: color.adjust($body-bg-dark, $lightness: -30%);
+
+      &:hover {
+        color: color.adjust($body-bg-dark, $lightness: -20%);
+      }
+
+      &:focus {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: transparent;
+      }
+    }
+
+    .page-item.active .page-link {
+      background-color: transparent;
+    }
+
+    .page-item.disabled .page-link {
+      color: color.adjust($body-bg-dark, $lightness: -50%);
+      background-color: transparent;
+      border-bottom: transparent;
+    }
+
+    // List Group
+    .list-group-item-action {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+
+      &:hover,
+      &:focus {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: color.adjust($primary-darker, $lightness: 4.5%);
+      }
+
+      &:active {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: color.adjust($primary-darker, $lightness: -3%);
+      }
+
+      &.disabled {
+        color: color.adjust($body-bg-dark, $lightness: -40%);
+      }
+    }
+
+    .list-group-item {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+      border-color: color.adjust($primary-darker, $lightness: -4.5%);
+
+      &.active {
+        color: variables.$white;
+        background-color: $primary;
+        border-color: $primary;
+      }
+    }
+
+    // Popovers
+    .popover {
+      border-color: color.adjust($primary-darker, $lightness: -4.5%);
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+    }
+
+    .bs-popover-top {
+      .popover-arrow::before {
+        border-top-color: color.adjust(color.adjust($primary-darker, $lightness: -4.5%), $alpha: 0.05);
+      }
+
+      .popover-arrow::after {
+        border-top-color: color.adjust($primary-darker, $lightness: 3%);
+      }
+    }
+
+    .bs-popover-end {
+      .popover-arrow::before {
+        border-right-color: color.adjust(color.adjust($primary-darker, $lightness: -4.5%), $alpha: 0.05);
+      }
+
+      .popover-arrow::after {
+        border-right-color: color.adjust($primary-darker, $lightness: 3%);
+      }
+    }
+
+    .bs-popover-bottom {
+      .popover-arrow::before {
+        border-bottom-color: color.adjust(color.adjust($primary-darker, $lightness: -4.5%), $alpha: 0.05);
+      }
+
+      .popover-arrow::after {
+        border-bottom-color: color.adjust($primary-darker, $lightness: 3%);
+      }
+    }
+
+    .bs-popover-start {
+      .popover-arrow::before {
+        border-left-color: color.adjust(color.adjust($primary-darker, $lightness: -4.5%), $alpha: 0.05);
+      }
+
+      .popover-arrow::after {
+        border-left-color: color.adjust($primary-darker, $lightness: 3%);
+      }
+    }
+
+    .bs-popover-auto {
+      &[x-placement^="top"] {
+        @extend .bs-popover-top;
+      }
+      &[x-placement^="right"] {
+        @extend .bs-popover-end;
+      }
+      &[x-placement^="bottom"] {
+        @extend .bs-popover-bottom;
+      }
+      &[x-placement^="left"] {
+        @extend .bs-popover-start;
+      }
+    }
+
+    .popover-header {
+      color: $body-bg-dark;
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+      border-bottom-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    .popover-body {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+    }
+
+    // Dropdowns
+    .dropdown-menu {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+      border-color: color.adjust($primary-darker, $lightness: 3%);
+      box-shadow: 0 .25rem 2rem rgba(variables.$black, .25);
+
+      .dropdown-item {
+        color: color.adjust($body-bg-dark, $lightness: -15%);
+
+        &:hover,
+        &:focus {
+          color: color.adjust($body-bg-dark, $lightness: -10%);
+          background-color: color.adjust($primary-darker, $lightness: 8%);
+        }
+
+        &.active,
+        &:active {
+          color: color.adjust($body-bg-dark, $lightness: -5%);
+          background-color: color.adjust($primary-darker, $lightness: 12%);
+        }
+
+        &.disabled,
+        &:disabled {
+          color: color.adjust($body-bg-dark, $lightness: -50%);
+        }
+      }
+
+      .dropdown-divider {
+        border-color: color.adjust($primary-darker, $lightness: 10%);
+      }
+
+      .dropdown-item-text {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+      }
+
+      .dropdown-header {
+        color: color.adjust($body-bg-dark, $lightness: -25%) !important;
+      }
+    }
+
+    // Tables
+    .table {
+      --#{variables.$prefix}table-color: #{color.adjust($body-bg-dark, $lightness: -10%)};
+      --#{variables.$prefix}table-bg: #{$primary-darker};
+      --#{variables.$prefix}table-striped-color: #{$body-bg-light};
+      --#{variables.$prefix}table-striped-bg: #{color.adjust($primary-darker, $lightness: -1.5%)};
+      --#{variables.$prefix}table-active-color: #{$body-bg-light};
+      --#{variables.$prefix}table-active-bg: #{color.adjust($primary-darker, $lightness: 6%)};
+      --#{variables.$prefix}table-hover-color: #{$body-bg-light};
+      --#{variables.$prefix}table-hover-bg: #{color.adjust($primary-darker, $lightness: -2.5%)};
+      
+      color: $body-bg-light;
+      border-color: color.adjust($primary-darker, $lightness: -6%);
+    }
+
+    .table > :not(:last-child) > :last-child > * {
+      border-bottom-color: color.adjust($primary-darker, $lightness: -6%);
+    }
+
+    @include table-variants.table-variant("primary", rgba(functions.shade-color($primary, 20%), .75));
+    @include table-variants.table-variant("info", rgba(#1E3A8A, .75));
+    @include table-variants.table-variant("success", rgba(#14532D, .75));
+    @include table-variants.table-variant("danger", rgba(#7F1D1D, .75));
+    @include table-variants.table-variant("warning", rgba(#713F12, .75));
+
+    // Forms
+    .form-text {
+      color: color.adjust($body-bg-dark, $lightness: -30%);
+    }
+
+    .form-control::placeholder {
+      color: functions.tint-color($body-color, 30%);
+    }
+    
+    .form-control,
+    .form-select {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      border-color: color.adjust($primary-darker, $lightness: 8%);
+
+      &:focus {
+        color: variables.$white;
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        border-color: $primary;
+      }
+
+      &:disabled {
+        background-color: color.adjust($primary-darker, $lightness: 2%);
+        border-color: color.adjust($primary-darker, $lightness: 2%);
+      }
+    }
+
+    .form-select {
+      &:focus::-ms-value {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      }
+    }
+
+    .form-control-plaintext {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+    }
+
+    @include forms.form-validation-state("valid", color.adjust(variables.$success, $lightness: 10%), variables.$form-feedback-icon-valid);
+    @include forms.form-validation-state("invalid", color.adjust(variables.$danger, $lightness: 15%), variables.$form-feedback-icon-invalid);
+
+    .form-control.form-control-alt {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      border-color: color.adjust($primary-darker, $lightness: -3%);
+      background-color: color.adjust($primary-darker, $lightness: -3%);
+
+      &:focus {
+        color: variables.$white;
+        border-color: color.adjust($primary-darker, $lightness: -4.5%);
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        box-shadow: none;
+      }
+
+      &.is-valid {
+        &::placeholder {
+          color: rgba(variables.$white, .5);
+        }
+
+        border-color: rgba(#14532D, .85);
+        background-color: rgba(#14532D, .85);
+
+        &:focus {
+          border-color: rgba(#14532D, 1);
+          background-color: rgba(#14532D, 1);
+        }
+      }
+
+      &.is-invalid {
+        &::placeholder {
+          color: rgba(variables.$white, .5);
+        }
+
+        border-color: rgba(#7F1D1D, .85);
+        background-color: rgba(#7F1D1D, .85);
+
+        &:focus {
+          border-color: rgba(#7F1D1D, 1);
+          background-color: rgba(#7F1D1D, 1);
+        }
+      }
+    }
+
+    .input-group-text {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: -3%);
+      border-color: color.adjust($primary-darker, $lightness: 8%);
+    }
+
+    .input-group-text.input-group-text-alt {
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      border-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    .is-valid ~ .valid-feedback,
+    .is-valid ~ .valid-tooltip,
+    .was-validated :valid ~ .valid-feedback,
+    .was-validated :valid ~ .valid-tooltip,
+    .is-invalid ~ .invalid-feedback,
+    .is-invalid ~ .invalid-tooltip,
+    .was-validated :invalid ~ .invalid-feedback,
+    .was-validated :invalid~.invalid-tooltip {
+      display: block;
+    }
+
+    .form-check-input {
+      background-color: color.adjust($primary-darker, $lightness: -3%);
+      border-color: color.adjust($primary-darker, $lightness: 8%);
+
+      &:focus {
+        border-color: $primary;
+      }
+
+      &:checked {
+        background-color: $primary;
+        border-color: $primary;
+      }
+    }
+
+    .form-block {
+      .form-check-label {
+        border-color: color.adjust($primary-darker, $lightness: 8%);
+    
+        &:hover {
+          border-color: color.adjust(color.adjust($primary-darker, $lightness: 4.5%), $lightness: 5%);
+        }
+    
+        &::before {
+          background-color: $primary;
+        }
+      }
+    
+      .form-check-input:checked ~ .form-check-label {
+        border-color: $primary;
+      }
+    
+      .form-check-input:focus ~ .form-check-label {
+        border-color: $primary;
+        box-shadow: 0 0 0 0.25rem rgba($primary, .25);
+      }
+    
+      .form-check-input:disabled:not([checked]) + .form-check-label:hover,
+      .form-check-input[readonly]:not([checked]) + .form-check-label:hover { 
+        border-color: color.adjust($primary-darker, $lightness: -4.5%);
+      }
+    }
+
+    .form-floating > .form-control::placeholder {
+      color: transparent;
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label,
+    .form-floating > .form-control-plaintext ~ label,
+    .form-floating > .form-select ~ label {
+      color: functions.tint-color($body-color, 50%);
+    }
+
+    .form-floating > .form-control:focus ~ label::after,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label::after,
+    .form-floating > .form-control-plaintext ~ label::after,
+    .form-floating > .form-select ~ label::after {
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    // Breadcrumb
+    .breadcrumb-item + .breadcrumb-item::before {
+      color: rgba(variables.$white, .15);
+    }
+
+    .breadcrumb.breadcrumb-alt {
+      .breadcrumb-item + .breadcrumb-item::before {
+        color: rgba(variables.$white, .15);
+      }
+    }
+
+    .breadcrumb-item.active {
+      color: variables.$white;
+    }
+
+    // Alerts
+    .alert-primary {
+      @include alert.alert-variant($primary, $primary, variables.$white, false);
+    }
+
+    .alert-secondary {
+      @include alert.alert-variant(color.adjust($primary-darker, $lightness: 6%), color.adjust($primary-darker, $lightness: 6%), variables.$white, false);
+    }
+
+    .alert-success {
+      @include alert.alert-variant(functions.shade-color(variables.$success, 25%), functions.shade-color(variables.$success, 25%), variables.$white, false);
+    }
+
+    .alert-info {
+      @include alert.alert-variant(functions.shade-color(variables.$info, 25%), functions.shade-color(variables.$info, 25%), variables.$white, false);
+    }
+
+    .alert-warning {
+      @include alert.alert-variant(functions.shade-color(variables.$warning, 25%), functions.shade-color(variables.$warning, 25%), variables.$white, false);
+    }
+
+    .alert-danger {
+      @include alert.alert-variant(functions.shade-color(variables.$danger, 25%), functions.shade-color(variables.$danger, 25%), variables.$white, false);
+    }
+
+    .alert-dark {
+      @include alert.alert-variant(color.adjust($primary-darker, $lightness: -6%), color.adjust($primary-darker, $lightness: -6%), variables.$white, false);
+    }
+
+    .alert-light {
+      @include alert.alert-variant(color.adjust($primary-darker, $lightness: 12%), color.adjust($primary-darker, $lightness: 12%), variables.$white, false);
+    }
+
+    .btn-close {
+      filter: variables.$btn-close-white-filter;
+    }
+
+    // Progress Bars
+    .progress {
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    // Lists
+    .list-activity > li:not(:last-child) {
+      border-bottom-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    // Modals
+    .modal-content {
+      background: $primary-darker;
+    }
+
+    // Toasts
+    .toast {
+      background-color: $primary-darker;
+    }
+
+    .toast-header {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: 6%);
+    }
+
+    // Borders
+    .border {
+      border-color: color.adjust($primary-darker, $lightness: 6%) !important;
+    }
+
+    .border-top {
+      border-top-color: color.adjust($primary-darker, $lightness: 6%) !important;
+    }
+
+    .border-end {
+      border-right-color: color.adjust($primary-darker, $lightness: 6%) !important;
+    }
+
+    .border-bottom {
+      border-bottom-color: color.adjust($primary-darker, $lightness: 6%) !important;
+    }
+
+    .border-start {
+      border-left-color: color.adjust($primary-darker, $lightness: 6%) !important;
+    }
+
+    .border-primary {
+      border-color: $primary !important;
+    }
+    .border-white {
+      border-color: variables.$white !important;
+    }
+    .border-white-op {
+      border-color: rgba(variables.$white, 0.1) !important;
+    }
+    .border-black-op {
+      border-color: rgba(variables.$black, 0.1) !important;
+    }
+
+    // Blocks
+    .block {
+      background-color: $primary-darker;
+      box-shadow: 0 1px 2px rgba(color.adjust($primary-darker, $lightness: -4%), .5), 0 1px 2px rgba(color.adjust($primary-darker, $lightness: -4%), .5);
+
+      &.block-bordered {
+        border: 1px solid color.adjust($primary-darker, $lightness: 6%);
+        box-shadow: none;
+      }
+    
+      .block-header-default {
+        background-color: color.adjust($primary-darker, $lightness: 6%) !important;
+      }
+
+      .block-title {
+        small {
+          color: color.adjust($body-bg-light, $lightness: -30%);
+        }
+      }
+
+      &.block-mode-loading::after {
+        color: variables.$white;
+      }
+
+      &.block-transparent {
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      &.block-mode-fullscreen {
+        &.block-transparent {
+          background-color: $primary-darker;
+        }
+      }
+    }
+
+    .block .block,
+    .content-side .block {
+      box-shadow: none;
+    }
+
+    a.block {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+    
+      &.block-link-pop {
+        &:hover {
+          box-shadow: 0 0.5rem 2.5rem color.adjust($primary-darker, $lightness: -8%);
+        }
+    
+        &:active {
+          box-shadow: 0 0.375rem 0.55rem color.adjust($primary-darker, $lightness: -1%);
+        }
+      }
+    
+      &.block-link-shadow {
+        &:hover {
+          box-shadow: 0 0 1.5rem color.adjust($primary-darker, $lightness: -8%);
+        }
+    
+        &:active {
+          box-shadow: 0 0 0.75rem color.adjust($primary-darker, $lightness: -5%);
+        }
+      }
+    }
+
+    .btn-block-option {
+      color: color.adjust($body-bg-light, $lightness: -30%);
+    
+      .block-header-default & {
+        color: color.adjust($body-bg-light, $lightness: -35%);
+      }
+    
+      &:hover,
+      &:focus {
+        color: color.adjust($body-bg-light, $lightness: -40%);
+      }
+    
+      &:active {
+        color: color.adjust($body-bg-light, $lightness: -30%);
+      }
+    }
+
+    a.btn-block-option:focus,
+    .active > a.btn-block-option,
+    .show > button.btn-block-option {
+      color: color.adjust($body-bg-light, $lightness: -40%);
+    }
+    
+    .block.block-themed {
+      .btn-block-option,
+      .btn-block-option:hover,
+      .btn-block-option:focus,
+      .btn-block-option:active,
+      a.btn-block-option:focus,
+      .active > a.btn-block-option,
+      .show > button.btn-block-option {
+        color: variables.$white;
+      }
+    }
+
+    // Timeline
+    .timeline::before {
+      background-color: color.adjust($primary-darker, $lightness: 6%);
+    }
+
+    .timeline-event-icon {
+      box-shadow: 0 0.375rem 1.5rem $primary-darker;
+    }
+
+    @include breakpoints.media-breakpoint-up(xl) {
+      .timeline-centered {
+        .timeline-event-time {
+          background-color: color.adjust($primary-darker, $lightness: 6%);
+        }
+      }
+    }
+
+    // Images
+    .img-thumb {
+      background-color: color.adjust($primary-darker, $lightness: -6%);
+    }
+
+    // SweetAlert2
+    .swal2-popup {
+      background-color: $primary-darker;
+    }
+
+    .swal2-html-container {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+    }
+
+    // jVectorMap
+    .jvectormap-container {
+      background-color: $primary-darker !important;
+    }
+
+    // CKEditor 5
+    .ck.ck-editor {
+      color: $body-color;
+    }
+
+    // DropzoneJS
+    .dropzone {
+      background-color: color.adjust($primary-darker, $lightness: 3%);
+      border-color: color.adjust($primary-darker, $lightness: 6%);
+
+      .dz-message {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+      }
+
+      &:hover {
+        background-color: color.adjust($primary-darker, $lightness: 6%);
+        border-color: $primary;
+
+        .dz-message {
+          color: $primary;
+        }
+      }
+      
+      .dz-preview.dz-image-preview {
+        background-color: transparent;
+      }
+    }
+
+    // FullCalendar
+    .fc.fc-theme-standard {
+      a {
+        color: color.adjust($body-bg-dark, $lightness: -15%) !important;
+      }
+
+      .fc-button-primary {
+        color: color.adjust($body-bg-dark, $lightness: -15%);
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        border-color: color.adjust($primary-darker, $lightness: -4.5%);
+
+        &:not(:disabled):hover {
+          color: color.adjust($body-bg-dark, $lightness: -10%);
+          background-color: color.adjust($primary-darker, $lightness: 3%);
+          border-color: color.adjust($primary-darker, $lightness: 3%);
+        }
+
+        &:not(:disabled).fc-button-active,
+        &:not(:disabled):active {
+          color: color.adjust($body-bg-dark, $lightness: -10%);
+          background-color: color.adjust($primary-darker, $lightness: 3%);
+          border-color: color.adjust($primary-darker, $lightness: 3%);
+        }
+
+        &:focus,
+        &:not(:disabled).fc-button-active:focus,
+        &:not(:disabled):active:focus {
+          box-shadow: 0 0 0 .2rem rgba($primary, .4)
+        }
+      }
+
+      .fc-list, .fc-scrollgrid,
+      th,
+      td {
+        border-color: color.adjust($primary-darker, $lightness: -6%);
+      }
+
+      .fc-list-day-cushion,
+      .fc-col-header-cell {
+        background-color: color.adjust($primary-darker, $lightness: 3%);
+      }
+
+      .fc-list-event:hover td {
+        background-color: color.adjust($primary-darker, $lightness: -2.5%);
+      }
+    }
+
+    // Ion Range Slider
+    .irs,
+    .irs--round .irs-grid-text {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+    }
+
+    .irs.irs--round {
+      .irs-min,
+      .irs-max,
+      .irs-line,
+      .irs-grid-pol,
+      .irs-handle {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background: color.adjust($primary-darker, $lightness: -3%);
+      }
+    }
+
+    // Select2
+    .select2-container--default {
+      .select2-selection--single .select2-selection__placeholder {
+        color: color.adjust($body-bg-dark, $lightness: -40%);
+      }
+
+      .select2-selection--single,
+      .select2-selection--multiple {
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        border-color: color.adjust($primary-darker, $lightness: 8%);
+      }
+
+      &.select2-container--focus .select2-selection--multiple,
+      &.select2-container--focus .select2-selection--single,
+      &.select2-container--open .select2-selection--multiple,
+      &.select2-container--open .select2-selection--single {
+        border-color: $primary;
+      }
+
+      .select2-selection--single .select2-selection__rendered {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+      }
+
+      .select2-search--dropdown .select2-search__field {
+        border-color: color.adjust($primary-darker, $lightness: 8%);
+      }
+
+      .select2-dropdown .select2-search__field:focus {
+        border-color: $primary;
+      }
+
+      .select2-dropdown {
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        border-color: color.adjust($primary-darker, $lightness: 8%);
+      }
+
+      .select2-search--dropdown .select2-search__field {
+        color: color.adjust($body-bg-dark, $lightness: -10%);
+        background-color: color.adjust($primary-darker, $lightness: -4.5%);
+        border-color: color.adjust($primary-darker, $lightness: 8%);
+      }
+
+      .select2-results__option[aria-selected=true] {
+        color: variables.$white;
+        background-color: $primary;
+      }
+
+      .select2-search__field::placeholder {
+        color: color.adjust($body-bg-dark, $lightness: -40%);
+      }
+    }
+
+    .is-valid + .select2-container--default,
+    .is-valid + .select2-container--default.select2-container--focus {
+      .select2-selection--single,
+      .select2-selection--multiple {
+        border-color: color.adjust(variables.$success, $lightness: 10%);
+      }
+    }
+
+    .is-valid + .select2-container--default.select2-container--focus,
+    .is-valid + .select2-container--default.select2-container--open {
+      .select2-selection--single,
+      .select2-selection--multiple {
+        box-shadow: 0 0 0 variables.$input-focus-width rgba(color.adjust(variables.$success, $lightness: 10%), 0.25);
+      }
+    }
+
+    .is-invalid + .select2-container--default,
+    .is-invalid + .select2-container--default.select2-container--focus {
+      .select2-selection--single,
+      .select2-selection--multiple {
+        border-color: color.adjust(variables.$danger, $lightness: 10%);
+      }
+    }
+
+    .is-invalid + .select2-container--default.select2-container--focus,
+    .is-invalid + .select2-container--default.select2-container--open {
+      .select2-selection--single,
+      .select2-selection--multiple {
+        box-shadow: 0 0 0 variables.$input-focus-width rgba(color.adjust(variables.$danger, $lightness: 10%), 0.25);
+      }
+    }
+
+    // Bootstrap Datepicker
+    .datepicker .datepicker-switch:hover,
+    .datepicker .next:hover,
+    .datepicker .prev:hover,
+    .datepicker tfoot tr th:hover,
+    .datepicker table tr td.day:hover,
+    .datepicker table tr td.focused {
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    .datepicker table tr td.selected,
+    .datepicker table tr td.selected.highlighted {
+      color: variables.$white;
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      border-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    .datepicker table tr td.range {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      border-color: color.adjust($primary-darker, $lightness: -4.5%);
+    }
+
+    .datepicker table tr td.active:hover,
+    .datepicker table tr td.active:hover:hover,
+    .datepicker table tr td.active.disabled:hover,
+    .datepicker table tr td.active.disabled:hover:hover,
+    .datepicker table tr td.active:focus,
+    .datepicker table tr td.active:hover:focus,
+    .datepicker table tr td.active.disabled:focus,
+    .datepicker table tr td.active.disabled:hover:focus,
+    .datepicker table tr td.active:active,
+    .datepicker table tr td.active:hover:active,
+    .datepicker table tr td.active.disabled:active,
+    .datepicker table tr td.active.disabled:hover:active,
+    .datepicker table tr td.active.active,
+    .datepicker table tr td.active:hover.active,
+    .datepicker table tr td.active.disabled.active,
+    .datepicker table tr td.active.disabled:hover.active,
+    .open .dropdown-toggle.datepicker table tr td.active,
+    .open .dropdown-toggle.datepicker table tr td.active:hover,
+    .open .dropdown-toggle.datepicker table tr td.active.disabled,
+    .open .dropdown-toggle.datepicker table tr td.active.disabled:hover,
+    .datepicker table tr td span.active:hover,
+    .datepicker table tr td span.active:hover:hover,
+    .datepicker table tr td span.active.disabled:hover,
+    .datepicker table tr td span.active.disabled:hover:hover,
+    .datepicker table tr td span.active:focus,
+    .datepicker table tr td span.active:hover:focus,
+    .datepicker table tr td span.active.disabled:focus,
+    .datepicker table tr td span.active.disabled:hover:focus,
+    .datepicker table tr td span.active:active,
+    .datepicker table tr td span.active:hover:active,
+    .datepicker table tr td span.active.disabled:active,
+    .datepicker table tr td span.active.disabled:hover:active,
+    .datepicker table tr td span.active.active,
+    .datepicker table tr td span.active:hover.active,
+    .datepicker table tr td span.active.disabled.active,
+    .datepicker table tr td span.active.disabled:hover.active,
+    .open .dropdown-toggle.datepicker table tr td span.active,
+    .open .dropdown-toggle.datepicker table tr td span.active:hover,
+    .open .dropdown-toggle.datepicker table tr td span.active.disabled,
+    .open .dropdown-toggle.datepicker table tr td span.active.disabled:hover {
+      background-color: $primary;
+      border-color: $primary;
+    }
+
+    // Flatpickr
+    .flatpickr-input.form-control:disabled,
+    .flatpickr-input.form-control[readonly],
+    .input.form-control:disabled,
+    .input.form-control[readonly] {
+      color: color.adjust($body-bg-dark, $lightness: -10%);
+      background-color: color.adjust($primary-darker, $lightness: -4.5%);
+      border-color: color.adjust($primary-darker, $lightness: 8%);
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
+      border-color: $primary;
+      background: $primary;
+    }
+
+    .flatpickr-months .flatpickr-prev-month:hover svg,
+    .flatpickr-months .flatpickr-next-month:hover svg {
+      fill: $primary;
+    }
+
+    // DataTables
+    table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1) > * {
+      box-shadow: inset 0 0 0 9999px color.adjust($primary-darker, $lightness: -1.5%);
+    }
+  } 
+}

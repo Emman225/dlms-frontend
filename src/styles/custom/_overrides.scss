@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  background-color: #f8fafc;
+  color: #1e293b;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.bg-white-10 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+// Wider content when not in narrow mode
+#page-container:not(.main-content-narrow) {
+  #main-container .content {
+    max-width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+.content-wider {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+  max-width: 100% !important;
+}
+
+// Remove underlines from menu items and common links
+a,
+.nav-main-link,
+.dropdown-item {
+  text-decoration: none !important;
+}
+
+.nav-main-link.active {
+  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+  font-weight: 600;
+}
+
+// Global Button styles
+.btn-primary {
+  transition: all 0.2s ease;
+  font-weight: 600;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+  }
+}
+
+// Premium Green style for record/validate (Explicit class only)
+.btn-premium-green {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  i {
+    margin-right: 8px;
+    font-size: 0.9rem;
+  }
+}
+
+// Form Controls Premium
+.form-control,
+.form-select {
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+
+  &:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    background-color: #fff;
+  }
+}
+
+.form-label {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+// Datatable styling
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  background-color: #fff;
+  border: 1px solid #f1f5f9;
+
+  tbody tr {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(13, 110, 253, 0.04) !important;
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  td {
+    padding: 10px 12px !important; // Reduced from 14px 16px
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    color: #475569;
+    font-size: 0.85rem; // Slightly smaller font
+  }
+}
+
+// Datatable header pure black
+thead,
+.table thead,
+.table thead tr,
+.table thead th,
+.table-vcenter thead th,
+.js-dataTable-lectures thead th,
+.js-dataTable-buttons thead th,
+.dataTables_scrollHead table thead th {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  padding: 12px 12px !important; // Reduced from 16px
+  border: none !important;
+
+  // Ensure icons or specific text inherit white color
+  font,
+  span,
+  i,
+  div {
+    color: #ffffff !important;
+  }
+}
+
+// Premium Action Buttons
+.btn-group-premium {
+  display: flex !important;
+  justify-content: center;
+  gap: 8px;
+
+  .btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+
+    i {
+      font-size: 0.9rem;
+    }
+
+    &.btn-alt-info {
+      background-color: #e0f2fe;
+      color: #0369a1;
+
+      &:hover {
+        background-color: #0369a1;
+        color: #fff;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.25);
+      }
+    }
+
+    &.btn-alt-secondary {
+      background-color: #f1f5f9;
+      color: #475569;
+
+      &:hover {
+        background-color: #475569;
+        color: #fff;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 12px rgba(71, 85, 105, 0.25);
+      }
+    }
+
+    &.btn-alt-danger {
+      background-color: #fee2e2;
+      color: #b91c1c;
+
+      &:hover {
+        background-color: #b91c1c;
+        color: #fff;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+      }
+    }
+
+    &.btn-alt-success {
+      background-color: #dcfce7;
+      color: #15803d;
+
+      &:hover {
+        background-color: #15803d;
+        color: #fff;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+      }
+    }
+  }
+}
+
+// Modals Design
+.modal-content {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25) !important;
+  overflow: hidden;
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-bottom: none !important;
+  padding: 1.5rem 1.75rem !important;
+
+  .modal-title {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 1.25rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 0.8;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.modal-body {
+  padding: 2rem 1.75rem !important;
+  background-color: #ffffff;
+}
+
+.modal-footer {
+  border-top: 1px solid #f1f5f9 !important;
+  padding: 1.25rem 1.75rem !important;
+  background-color: #f8fafc;
+}
+
+// Blocks Design
+.block {
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  margin-bottom: 2rem;
+  border-radius: 16px !important;
+  overflow: hidden;
+  background-color: #fff;
+
+  .block-header {
+    background-color: #f8fafc !important;
+    border-bottom: 1px solid #edf2f7 !important;
+    padding: 1.25rem 1.75rem !important;
+  }
+
+  .block-title {
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+}
+
+// Custom Login Button (Blue -> Green hover)
+.btn-login-custom {
+  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3) !important;
+
+  &:hover {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+}

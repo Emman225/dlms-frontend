@@ -1,0 +1,27 @@
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "../oneui/variables" as oneui-variables;
+
+//
+// SimpleMDE Markdown Editor
+//
+// Overwrite/Extend styles
+// --------------------------------------------------
+
+.CodeMirror-fullscreen,
+.editor-toolbar.fullscreen,
+.editor-preview-side {
+  z-index: bootstrap-variables.$zindex-modal + 2;
+}
+
+.editor-preview {
+  z-index: bootstrap-variables.$zindex-modal + 1;
+}
+
+.editor-toolbar {
+  border-color: oneui-variables.$body-bg-dark;
+  background-color: oneui-variables.$body-bg-light;
+}
+
+.CodeMirror {
+  border-color: oneui-variables.$body-bg-dark;
+}

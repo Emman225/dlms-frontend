@@ -1,0 +1,28 @@
+@use "sass:color";
+@use "sass:meta";
+@use "sass:string";
+//
+// Text emphasis
+// --------------------------------------------------
+
+@mixin text-emphasis-variant($parent, $color) {
+  #{$parent} {
+    color: $color !important;
+  }
+
+  a#{$parent} {
+    &.link-fx::before {
+      background-color: $color !important;
+    }
+
+    &:hover,
+    &:focus {
+      // If $color is a real color, adjust with Sass. If it's a CSS variable, use CSS color-mix.
+      @if meta.type-of($color) == color {
+        color: color.adjust($color, $lightness: -10%) !important;
+      } @else {
+        color: string.unquote("color-mix(in srgb, #{$color}, black 10%)") !important;
+      }
+    }
+  }
+}

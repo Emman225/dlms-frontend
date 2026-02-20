@@ -1,0 +1,190 @@
+@use "../../bootstrap/mixins/breakpoints";
+@use "../../bootstrap/variables" as bootstrap-variables;
+@use "../mixins/background-variant";
+@use "../variables" as oneui-variables;
+@use "../variables-themes";
+
+//
+// Background
+// --------------------------------------------------
+
+// Black/White with opacity
+.bg-black {
+  &-5 {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  &-10 {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+  &-25 {
+    background-color: rgba(0, 0, 0, 0.25) !important;
+  }
+  &-50 {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  &-75 {
+    background-color: rgba(0, 0, 0, 0.75) !important;
+  }
+  &-90 {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+  }
+  &-95 {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+  }
+}
+
+.bg-white {
+  &-5 {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+  &-10 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  &-25 {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+  }
+  &-50 {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+  }
+  &-75 {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+  }
+  &-90 {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+  }
+  &-95 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+  }
+}
+
+// Image Background
+.bg-image {
+  background-position: 0% 50%;
+  background-size: cover;
+
+  &-top {
+    background-position-y: 0%;
+  }
+  &-center {
+    background-position-x: 50%;
+  }
+  &-bottom {
+    background-position-y: 100%;
+  }
+
+  @include breakpoints.media-breakpoint-up(xl) {
+    &-fixed {
+      background-attachment: fixed;
+    }
+  }
+}
+
+// Pattern Image
+.bg-pattern {
+  background-repeat: repeat;
+}
+
+// Video Background
+.bg-video {
+  width: 100%;
+  transform: translateZ(0);
+}
+
+// Contextual colors
+@include background-variant.bg-variant(".bg-primary-op", rgba(bootstrap-variables.$primary, 0.75));
+@include background-variant.bg-variant(".bg-primary", bootstrap-variables.$primary);
+@include background-variant.bg-variant(".bg-primary-dark", oneui-variables.$primary-dark);
+@include background-variant.bg-variant(".bg-primary-dark-op", rgba(oneui-variables.$primary-dark, 0.8));
+@include background-variant.bg-variant(".bg-primary-darker", oneui-variables.$primary-darker);
+@include background-variant.bg-variant(".bg-primary-light", oneui-variables.$primary-light);
+@include background-variant.bg-variant(".bg-primary-lighter", oneui-variables.$primary-lighter);
+
+@include background-variant.bg-variant(".bg-success", bootstrap-variables.$success);
+@include background-variant.bg-variant(".bg-success-light", oneui-variables.$success-light);
+@include background-variant.bg-variant(".bg-warning", bootstrap-variables.$warning);
+@include background-variant.bg-variant(".bg-warning-light", oneui-variables.$warning-light);
+@include background-variant.bg-variant(".bg-info", bootstrap-variables.$info);
+@include background-variant.bg-variant(".bg-info-light", oneui-variables.$info-light);
+@include background-variant.bg-variant(".bg-danger", bootstrap-variables.$danger);
+@include background-variant.bg-variant(".bg-danger-light", oneui-variables.$danger-light);
+
+@include background-variant.bg-variant(".bg-success-op", rgba(oneui-variables.$success-light, 0.95));
+@include background-variant.bg-variant(".bg-warning-op", rgba(oneui-variables.$warning-light, 0.95));
+@include background-variant.bg-variant(".bg-info-op", rgba(oneui-variables.$info-light, 0.95));
+@include background-variant.bg-variant(".bg-danger-op ", rgba(oneui-variables.$danger-light, 0.95));
+
+@include background-variant.bg-variant(".bg-body", bootstrap-variables.$light);
+@include background-variant.bg-variant(".bg-body-light", oneui-variables.$body-bg-light);
+@include background-variant.bg-variant(".bg-body-dark", oneui-variables.$body-bg-dark);
+@include background-variant.bg-variant(".bg-body-extra-light", bootstrap-variables.$white);
+@include background-variant.bg-variant(".bg-muted", bootstrap-variables.$gray-600);
+
+@include background-variant.bg-variant(".bg-white", bootstrap-variables.$white);
+@include background-variant.bg-variant(".bg-black", bootstrap-variables.$black);
+
+@include background-variant.bg-variant(".bg-gray", bootstrap-variables.$gray-400);
+@include background-variant.bg-variant(".bg-gray-dark", bootstrap-variables.$gray-600);
+@include background-variant.bg-variant(".bg-gray-darker", bootstrap-variables.$gray-800);
+@include background-variant.bg-variant(".bg-gray-light", bootstrap-variables.$gray-200);
+@include background-variant.bg-variant(".bg-gray-lighter", bootstrap-variables.$gray-100);
+
+// Elements
+@include background-variant.bg-variant(".bg-header-light", oneui-variables.$header-bg);
+@include background-variant.bg-variant(".bg-header-dark", oneui-variables.$header-dark-bg);
+
+@include background-variant.bg-variant(".bg-sidebar-light", oneui-variables.$sidebar-bg);
+@include background-variant.bg-variant(".bg-sidebar-dark", oneui-variables.$sidebar-dark-bg);
+
+// Default Color Theme
+@include background-variant.bg-variant(".bg-default", bootstrap-variables.$primary);
+@include background-variant.bg-variant(".bg-default-op", rgba(bootstrap-variables.$primary, 0.75));
+@include background-variant.bg-variant(".bg-default-dark", oneui-variables.$primary-dark);
+@include background-variant.bg-variant(".bg-default-dark-op", rgba(oneui-variables.$primary-dark, 0.8));
+@include background-variant.bg-variant(".bg-default-darker", oneui-variables.$primary-darker);
+@include background-variant.bg-variant(".bg-default-light", oneui-variables.$primary-light);
+@include background-variant.bg-variant(".bg-default-lighter", oneui-variables.$primary-lighter);
+
+// Amethyst Color Theme
+@include background-variant.bg-variant(".bg-amethyst", variables-themes.$theme-amethyst-primary);
+@include background-variant.bg-variant(".bg-amethyst-op", rgba(variables-themes.$theme-amethyst-primary, 0.75));
+@include background-variant.bg-variant(".bg-amethyst-dark", variables-themes.$theme-amethyst-dark);
+@include background-variant.bg-variant(".bg-amethyst-dark-op", rgba(variables-themes.$theme-amethyst-dark, 0.8));
+@include background-variant.bg-variant(".bg-amethyst-darker", variables-themes.$theme-amethyst-darker);
+@include background-variant.bg-variant(".bg-amethyst-light", variables-themes.$theme-amethyst-light);
+@include background-variant.bg-variant(".bg-amethyst-lighter", variables-themes.$theme-amethyst-lighter);
+
+// City Color Theme
+@include background-variant.bg-variant(".bg-city", variables-themes.$theme-city-primary);
+@include background-variant.bg-variant(".bg-city-op", rgba(variables-themes.$theme-city-primary, 0.75));
+@include background-variant.bg-variant(".bg-city-dark", variables-themes.$theme-city-dark);
+@include background-variant.bg-variant(".bg-city-dark-op", rgba(variables-themes.$theme-city-dark, 0.8));
+@include background-variant.bg-variant(".bg-city-darker", variables-themes.$theme-city-darker);
+@include background-variant.bg-variant(".bg-city-light", variables-themes.$theme-city-light);
+@include background-variant.bg-variant(".bg-city-lighter", variables-themes.$theme-city-lighter);
+
+// Flat Color Theme
+@include background-variant.bg-variant(".bg-flat", variables-themes.$theme-flat-primary);
+@include background-variant.bg-variant(".bg-flat-op", rgba(variables-themes.$theme-flat-primary, 0.75));
+@include background-variant.bg-variant(".bg-flat-dark", variables-themes.$theme-flat-dark);
+@include background-variant.bg-variant(".bg-flat-dark-op", rgba(variables-themes.$theme-flat-dark, 0.8));
+@include background-variant.bg-variant(".bg-flat-darker", variables-themes.$theme-flat-darker);
+@include background-variant.bg-variant(".bg-flat-light", variables-themes.$theme-flat-light);
+@include background-variant.bg-variant(".bg-flat-lighter", variables-themes.$theme-flat-lighter);
+
+// Modern Color Theme
+@include background-variant.bg-variant(".bg-modern", variables-themes.$theme-modern-primary);
+@include background-variant.bg-variant(".bg-modern-op", rgba(variables-themes.$theme-modern-primary, 0.75));
+@include background-variant.bg-variant(".bg-modern-dark", variables-themes.$theme-modern-dark);
+@include background-variant.bg-variant(".bg-modern-dark-op", rgba(variables-themes.$theme-modern-dark, 0.8));
+@include background-variant.bg-variant(".bg-modern-darker", variables-themes.$theme-modern-darker);
+@include background-variant.bg-variant(".bg-modern-light", variables-themes.$theme-modern-light);
+@include background-variant.bg-variant(".bg-modern-lighter", variables-themes.$theme-modern-lighter);
+
+// Smooth Color Theme
+@include background-variant.bg-variant(".bg-smooth", variables-themes.$theme-smooth-primary);
+@include background-variant.bg-variant(".bg-smooth-op", rgba(variables-themes.$theme-smooth-primary, 0.75));
+@include background-variant.bg-variant(".bg-smooth-dark", variables-themes.$theme-smooth-dark);
+@include background-variant.bg-variant(".bg-smooth-dark-op", rgba(variables-themes.$theme-smooth-dark, 0.8));
+@include background-variant.bg-variant(".bg-smooth-darker", variables-themes.$theme-smooth-darker);
+@include background-variant.bg-variant(".bg-smooth-light", variables-themes.$theme-smooth-light);
+@include background-variant.bg-variant(".bg-smooth-lighter", variables-themes.$theme-smooth-lighter);

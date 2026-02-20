@@ -1,0 +1,146 @@
+@use "sass:color";
+@use "../bootstrap/mixins/lists";
+@use "../bootstrap/variables" as bootstrap-variables;
+@use "variables" as oneui-variables;
+
+//
+// Nav
+// --------------------------------------------------
+
+// Nav Pills
+.nav-pills {
+  .nav-link {
+    color: bootstrap-variables.$body-color;
+
+    &:hover,
+    &:focus {
+      background-color: bootstrap-variables.$light;
+    }
+  }
+
+  .nav-link.active,
+  .show > .nav-link {
+    color: bootstrap-variables.$nav-pills-link-active-color;
+    background-color: bootstrap-variables.$nav-pills-link-active-bg;
+  }
+}
+
+// Tabs block variation
+.nav-tabs-block {
+  background-color: oneui-variables.$body-bg-light;
+  border-bottom: none;
+
+  .nav-item {
+    margin-bottom: 0;
+  }
+
+  .nav-link {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-color: transparent;
+    border-radius: 0;
+    color: bootstrap-variables.$body-color;
+    font-size: bootstrap-variables.$font-size-sm;
+
+    &:hover,
+    &:focus {
+      color: bootstrap-variables.$primary;
+      background-color: oneui-variables.$body-bg-light;
+      border-color: transparent;
+    }
+  }
+
+  .nav-link.active,
+  .nav-item.show .nav-link {
+    color: bootstrap-variables.$body-color;
+    background-color: bootstrap-variables.$white;
+    border-color: transparent;
+  }
+}
+
+// Tabs block alternative variation
+.nav-tabs-alt {
+  background-color: transparent;
+  border-bottom-color: oneui-variables.$body-bg-dark;
+
+  .nav-item {
+    margin-bottom: -1px;
+  }
+
+  .nav-link {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    color: bootstrap-variables.$body-color;
+    font-size: bootstrap-variables.$font-size-sm;
+    background-color: transparent;
+    border: none;
+
+    &:hover,
+    &:focus {
+      color: bootstrap-variables.$primary;
+      background-color: transparent;
+      border-color: transparent;
+      box-shadow: inset 0 -2px bootstrap-variables.$primary;
+    }
+  }
+
+  .nav-link.active,
+  .nav-item.show .nav-link {
+    color: bootstrap-variables.$body-color;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: inset 0 -2px bootstrap-variables.$primary;
+  }
+}
+
+// Various Items Navigation
+.nav-items {
+  @include lists.list-unstyled;
+
+  a {
+    &:hover {
+      background-color: oneui-variables.$body-bg-light;
+    }
+
+    &:active {
+      background-color: bootstrap-variables.$light;
+    }
+  }
+
+  > li:not(:last-child) > a {
+    border-bottom: 1px solid bootstrap-variables.$light;
+  }
+}
+
+// Sidebar Mini Nav
+.mini-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: oneui-variables.$sidebar-mini-nav-width;
+  height: oneui-variables.$sidebar-mini-nav-width;
+  color: color.adjust(oneui-variables.$body-bg-dark, $lightness: -15%);
+  font-size: 1rem;
+
+  i {
+    transition: transform .2s ease-out;
+  }
+
+  &.active {
+    background-color: color.adjust(oneui-variables.$sidebar-dark-bg, $lightness: 6%);
+    color: bootstrap-variables.$white;
+  }
+
+  &:hover {
+    color: bootstrap-variables.$white;
+    background-color: color.adjust(oneui-variables.$sidebar-dark-bg, $lightness: 6%);
+  }
+
+  &:active {
+    color: color.adjust(oneui-variables.$body-bg-dark, $lightness: -15%);
+
+    i {
+      transform: scale(.9);
+    }
+  }
+}

@@ -1,0 +1,216 @@
+@use "sass:color";
+@use "../bootstrap/functions";
+@use "../bootstrap/variables";
+
+//
+// Themes variables
+// --------------------------------------------------
+
+// Amethyst Theme
+
+$theme-amethyst-primary: #6366f1 !default;
+$theme-amethyst-light: color.adjust($theme-amethyst-primary, $lightness: 15%) !default;
+$theme-amethyst-lighter: color.adjust($theme-amethyst-primary, $lightness: 28%) !default;
+$theme-amethyst-dark: #3e4254 !default;
+$theme-amethyst-darker: #2c2e3b !default;
+
+$theme-amethyst-body-bg: #f0f1f2 !default;
+$theme-amethyst-body-bg-dark: color.adjust($theme-amethyst-body-bg, $lightness: -4.5%) !default;
+$theme-amethyst-body-bg-light: color.adjust($theme-amethyst-body-bg, $lightness: 3%) !default;
+
+$theme-amethyst-body-color: $theme-amethyst-dark !default;
+$theme-amethyst-body-color-dark: $theme-amethyst-darker !default;
+$theme-amethyst-body-color-light: $theme-amethyst-body-bg-dark !default;
+
+$theme-amethyst-link-color: $theme-amethyst-primary !default;
+$theme-amethyst-link-hover-color: color.adjust(
+  $theme-amethyst-link-color,
+  $lightness: -20%
+) !default;
+
+$theme-amethyst-input-btn-focus-color: rgba(
+  $theme-amethyst-primary,
+  0.25
+) !default;
+$theme-amethyst-input-btn-focus-box-shadow: 0 0 0 variables.$input-btn-focus-width
+  $theme-amethyst-input-btn-focus-color !default;
+
+$theme-amethyst-input-bg: variables.$white !default;
+$theme-amethyst-input-color: $theme-amethyst-body-color !default;
+$theme-amethyst-input-border-color: color.adjust(
+  $theme-amethyst-body-bg,
+  $lightness: -8%
+) !default;
+
+$theme-amethyst-input-focus-bg: variables.$white !default;
+$theme-amethyst-input-focus-color: $theme-amethyst-body-color-dark !default;
+$theme-amethyst-input-focus-border-color: color.adjust(
+  $theme-amethyst-primary,
+  $lightness: 25%
+) !default;
+
+$theme-amethyst-header-bg: rgba(variables.$white, 0.75) !default;
+$theme-amethyst-header-dark-bg: rgba($theme-amethyst-darker, 1) !default;
+$theme-amethyst-sidebar-bg: variables.$white !default;
+$theme-amethyst-sidebar-dark-bg: $theme-amethyst-darker !default;
+$theme-amethyst-side-overlay-bg: variables.$white !default;
+
+// City Theme
+
+$theme-city-primary: #db3954 !default;
+$theme-city-light: color.adjust($theme-city-primary, $lightness: 18%) !default;
+$theme-city-lighter: color.adjust($theme-city-primary, $lightness: 32%) !default;
+$theme-city-dark: #4b4b4b !default;
+$theme-city-darker: #2b2b2b !default;
+
+$theme-city-body-bg: #f2f2f2 !default;
+$theme-city-body-bg-dark: color.adjust($theme-city-body-bg, $lightness: -4.5%) !default;
+$theme-city-body-bg-light: color.adjust($theme-city-body-bg, $lightness: 3%) !default;
+
+$theme-city-body-color: $theme-city-dark !default;
+$theme-city-body-color-dark: $theme-city-darker !default;
+$theme-city-body-color-light: $theme-city-body-bg-dark !default;
+
+$theme-city-link-color: $theme-city-primary !default;
+$theme-city-link-hover-color: color.adjust($theme-city-link-color, $lightness: -20%) !default;
+
+$theme-city-input-btn-focus-color: rgba($theme-city-primary, 0.25) !default;
+$theme-city-input-btn-focus-box-shadow: 0 0 0 variables.$input-btn-focus-width
+  $theme-city-input-btn-focus-color !default;
+
+$theme-city-input-bg: variables.$white !default;
+$theme-city-input-color: $theme-city-body-color !default;
+$theme-city-input-border-color: color.adjust($theme-city-body-bg, $lightness: -8%) !default;
+
+$theme-city-input-focus-bg: variables.$white !default;
+$theme-city-input-focus-color: $theme-city-body-color-dark !default;
+$theme-city-input-focus-border-color: color.adjust(
+  $theme-city-primary,
+  $lightness: 25%
+) !default;
+
+$theme-city-header-bg: rgba(variables.$white, 0.75) !default;
+$theme-city-header-dark-bg: rgba($theme-city-darker, 1) !default;
+$theme-city-sidebar-bg: variables.$white !default;
+$theme-city-sidebar-dark-bg: $theme-city-darker !default;
+$theme-city-side-overlay-bg: variables.$white !default;
+
+// Flat Theme
+
+$theme-flat-primary: #069fba !default;
+$theme-flat-light: functions.tint-color($theme-flat-primary, 50%) !default;
+$theme-flat-lighter: functions.tint-color($theme-flat-primary, 75%) !default;
+$theme-flat-dark: #36474d !default;
+$theme-flat-darker: #2a363b !default;
+
+$theme-flat-body-bg: #f0f2f2 !default;
+$theme-flat-body-bg-dark: color.adjust($theme-flat-body-bg, $lightness: -4.5%) !default;
+$theme-flat-body-bg-light: color.adjust($theme-flat-body-bg, $lightness: 3%) !default;
+
+$theme-flat-body-color: $theme-flat-dark !default;
+$theme-flat-body-color-dark: $theme-flat-darker !default;
+$theme-flat-body-color-light: $theme-flat-body-bg-dark !default;
+
+$theme-flat-link-color: $theme-flat-primary !default;
+$theme-flat-link-hover-color: color.adjust($theme-flat-link-color, $lightness: -20%) !default;
+
+$theme-flat-input-btn-focus-color: rgba($theme-flat-primary, 0.25) !default;
+$theme-flat-input-btn-focus-box-shadow: 0 0 0 variables.$input-btn-focus-width
+  $theme-flat-input-btn-focus-color !default;
+
+$theme-flat-input-bg: variables.$white !default;
+$theme-flat-input-color: $theme-flat-body-color !default;
+$theme-flat-input-border-color: color.adjust($theme-flat-body-bg, $lightness: -8%) !default;
+
+$theme-flat-input-focus-bg: variables.$white !default;
+$theme-flat-input-focus-color: $theme-flat-body-color-dark !default;
+$theme-flat-input-focus-border-color: color.adjust(
+  $theme-flat-primary,
+  $lightness: 25%
+) !default;
+
+$theme-flat-header-bg: rgba(variables.$white, 0.75) !default;
+$theme-flat-header-dark-bg: rgba($theme-flat-darker, 1) !default;
+$theme-flat-sidebar-bg: variables.$white !default;
+$theme-flat-sidebar-dark-bg: $theme-flat-darker !default;
+$theme-flat-side-overlay-bg: variables.$white !default;
+
+// Modern Theme
+
+$theme-modern-primary: #0c91cf !default;
+$theme-modern-light: color.adjust($theme-modern-primary, $lightness: 20%) !default;
+$theme-modern-lighter: color.adjust($theme-modern-primary, $lightness: 40%) !default;
+$theme-modern-dark: #323a47 !default;
+$theme-modern-darker: #262d3b !default;
+
+$theme-modern-body-bg: #f0f1f2 !default;
+$theme-modern-body-bg-dark: color.adjust($theme-modern-body-bg, $lightness: -4.5%) !default;
+$theme-modern-body-bg-light: color.adjust($theme-modern-body-bg, $lightness: 3%) !default;
+
+$theme-modern-body-color: $theme-modern-dark !default;
+$theme-modern-body-color-dark: $theme-modern-darker !default;
+$theme-modern-body-color-light: $theme-modern-body-bg-dark !default;
+
+$theme-modern-link-color: $theme-modern-primary !default;
+$theme-modern-link-hover-color: color.adjust($theme-modern-link-color, $lightness: -20%) !default;
+
+$theme-modern-input-btn-focus-color: rgba($theme-modern-primary, 0.25) !default;
+$theme-modern-input-btn-focus-box-shadow: 0 0 0 variables.$input-btn-focus-width
+  $theme-modern-input-btn-focus-color !default;
+
+$theme-modern-input-bg: variables.$white !default;
+$theme-modern-input-color: $theme-modern-body-color !default;
+$theme-modern-input-border-color: color.adjust($theme-modern-body-bg, $lightness: -8%) !default;
+
+$theme-modern-input-focus-bg: variables.$white !default;
+$theme-modern-input-focus-color: $theme-modern-body-color-dark !default;
+$theme-modern-input-focus-border-color: color.adjust(
+  $theme-modern-primary,
+  $lightness: 25%
+) !default;
+
+$theme-modern-header-bg: rgba(variables.$white, 0.75) !default;
+$theme-modern-header-dark-bg: rgba($theme-modern-darker, 1) !default;
+$theme-modern-sidebar-bg: variables.$white !default;
+$theme-modern-sidebar-dark-bg: $theme-modern-darker !default;
+$theme-modern-side-overlay-bg: variables.$white !default;
+
+// Smooth Theme
+
+$theme-smooth-primary: #d4428b !default;
+$theme-smooth-light: color.adjust($theme-smooth-primary, $lightness: 18%) !default;
+$theme-smooth-lighter: color.adjust($theme-smooth-primary, $lightness: 32%) !default;
+$theme-smooth-dark: #3c4554 !default;
+$theme-smooth-darker: #2a303b !default;
+
+$theme-smooth-body-bg: #f0f1f2 !default;
+$theme-smooth-body-bg-dark: color.adjust($theme-smooth-body-bg, $lightness: -4.5%) !default;
+$theme-smooth-body-bg-light: color.adjust($theme-smooth-body-bg, $lightness: 3%) !default;
+
+$theme-smooth-body-color: $theme-smooth-dark !default;
+$theme-smooth-body-color-dark: $theme-smooth-darker !default;
+$theme-smooth-body-color-light: $theme-smooth-body-bg-dark !default;
+
+$theme-smooth-link-color: $theme-smooth-primary !default;
+$theme-smooth-link-hover-color: color.adjust($theme-smooth-link-color, $lightness: -20%) !default;
+
+$theme-smooth-input-btn-focus-color: rgba($theme-smooth-primary, 0.25) !default;
+$theme-smooth-input-btn-focus-box-shadow: 0 0 0 variables.$input-btn-focus-width
+  $theme-smooth-input-btn-focus-color !default;
+
+$theme-smooth-input-bg: variables.$white !default;
+$theme-smooth-input-color: $theme-smooth-body-color !default;
+$theme-smooth-input-border-color: color.adjust($theme-smooth-body-bg, $lightness: -8%) !default;
+
+$theme-smooth-input-focus-bg: variables.$white !default;
+$theme-smooth-input-focus-color: $theme-smooth-body-color-dark !default;
+$theme-smooth-input-focus-border-color: color.adjust(
+  $theme-smooth-primary,
+  $lightness: 10%
+) !default;
+
+$theme-smooth-header-bg: rgba(variables.$white, 0.75) !default;
+$theme-smooth-header-dark-bg: rgba($theme-smooth-darker, 1) !default;
+$theme-smooth-sidebar-bg: variables.$white !default;
+$theme-smooth-sidebar-dark-bg: $theme-smooth-darker !default;
+$theme-smooth-side-overlay-bg: variables.$white !default;
