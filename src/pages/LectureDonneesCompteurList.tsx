@@ -12,7 +12,7 @@ import { compteurService } from '../services/compteurService'
 export default function LectureDonneesCompteurList() {
   const [rows, setRows] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
-  const [typeProfil, setTypeProfil] = useState<string>('')
+  const [typeProfil, setTypeProfil] = useState<string>('1')
   const [dateFin, setDateFin] = useState<string>(() => {
     const d = new Date()
     return d.toISOString().split('T')[0]
@@ -555,7 +555,27 @@ export default function LectureDonneesCompteurList() {
                         <i className="fa fa-info-circle fa-2x me-3"></i>
                         <div>
                           <p className="mb-0 fw-bold">Consultation du compteur : {numeroCompteur}</p>
-                          <p className="mb-0 small">{compteurInfo?.celluleLibelle ? `Poste : ${compteurInfo.celluleLibelle}` : 'Chargement des infos...'}</p>
+                          {compteurInfo ? (() => {
+                            const cls = (compteurInfo.cellules as any[] | undefined) || []
+                            const cellule = cls[0]
+                            const poste = cellule?.poste?.libelle || compteurInfo.posteLibelle || null
+                            const celluleNom = cellule?.libelle || compteurInfo.celluleLibelle || null
+                            const celluleType = cellule?.type || null
+                            const tension = cellule?.valeurTension || null
+                            const hasInfo = poste || celluleNom || celluleType || tension
+                            return hasInfo ? (
+                              <p className="mb-0 small">
+                                {poste && <><strong>Poste :</strong> {poste} &nbsp;</>}
+                                {celluleNom && <><strong>Cellule :</strong> {celluleNom} &nbsp;</>}
+                                {celluleType && <><strong>Type :</strong> {celluleType} &nbsp;</>}
+                                {tension && <><strong>Tension :</strong> {tension}</>}
+                              </p>
+                            ) : (
+                              <p className="mb-0 small">Aucune cellule associée</p>
+                            )
+                          })() : (
+                            <p className="mb-0 small">Chargement des infos...</p>
+                          )}
                         </div>
                       </div>
                     </div>

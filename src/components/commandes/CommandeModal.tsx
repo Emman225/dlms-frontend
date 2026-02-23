@@ -76,9 +76,24 @@ export default function CommandeModal({
     return () => document.body.classList.remove('modal-open')
   }, [show])
 
+  const nowLocalDT = () => {
+    const d = new Date()
+    const tz = d.getTimezoneOffset() * 60000
+    return new Date(d.getTime() - tz).toISOString().slice(0, 16)
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    if (name === 'typecommandeId' || name === 'numeroprofile' || name === 'nombreentree' || name === 'decalage') {
+    if (name === 'typecommandeId') {
+      const numVal = Number(value)
+      const typeName = types.find(t => t.id === numVal)?.libelletype?.toLowerCase() || ''
+      if (typeName.includes('heure actuelle')) {
+        const now = nowLocalDT()
+        setValues((v) => ({ ...v, typecommandeId: numVal, dateexec: now, dateexp: now }))
+      } else {
+        setValues((v) => ({ ...v, typecommandeId: numVal }))
+      }
+    } else if (name === 'numeroprofile' || name === 'nombreentree' || name === 'decalage') {
       setValues((v) => ({ ...v, [name]: Number(value) }))
     } else {
       setValues((v) => ({ ...v, [name]: value }))
@@ -87,8 +102,27 @@ export default function CommandeModal({
 
   const toISO = (v: string | null) => (v ? new Date(v).toISOString() : null)
 
+  // Validation en temps réel
+  const execAfterExp = !!(values.dateexec && values.dateexp && new Date(values.dateexec) > new Date(values.dateexp))
+  const debutAfterFin = !!(values.datedebut && values.datefin && new Date(values.datedebut) > new Date(values.datefin))
+  const hasValidationError = execAfterExp || debutAfterFin
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const ask = (window as any).Swal
+
+    if (execAfterExp) {
+      const msg = "L'heure d'exécution doit être inférieure ou égale à l'heure d'expiration."
+      ask ? ask.fire({ icon: 'warning', title: 'Validation', text: msg }) : alert(msg)
+      return
+    }
+
+    if (debutAfterFin) {
+      const msg = "La date de début doit être inférieure ou égale à la date de fin."
+      ask ? ask.fire({ icon: 'warning', title: 'Validation', text: msg }) : alert(msg)
+      return
+    }
+
     await onSubmit({
       ...values,
       dateexec: toISO(values.dateexec),
@@ -137,11 +171,12 @@ export default function CommandeModal({
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Heure d'exécution <i className="fa fa-info-circle text-info ms-1" title="Date d'exécution planifiée"></i></label>
-                    <input type="datetime-local" className="form-control" name="dateexec" value={values.dateexec ?? ''} onChange={handleChange} />
+                    <input type="datetime-local" className={`form-control ${execAfterExp ? 'is-invalid' : ''}`} name="dateexec" value={values.dateexec ?? ''} onChange={handleChange} />
+                    {execAfterExp && <div className="invalid-feedback">L'heure d'exécution doit être inférieure ou égale à l'heure d'expiration.</div>}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Heure d'expiration <i className="fa fa-info-circle text-info ms-1" title="Date d'expiration"></i></label>
-                    <input type="datetime-local" className="form-control" name="dateexp" value={values.dateexp ?? ''} onChange={handleChange} />
+                    <input type="datetime-local" className={`form-control ${execAfterExp ? 'is-invalid' : ''}`} name="dateexp" value={values.dateexp ?? ''} onChange={handleChange} />
                   </div>
                 </div>
 
@@ -151,9 +186,11 @@ export default function CommandeModal({
                     <label className="form-label">Type <i className="fa fa-info-circle text-info ms-1"></i></label>
                     <select className="form-select" name="typecommandeId" value={values.typecommandeId} onChange={handleChange} required>
                       <option value={0} disabled>-- Sélectionner --</option>
-                      {types.map((t) => (
-                        <option key={t.id} value={t.id}>{t.libelletype ?? t.id}</option>
-                      ))}
+                      {types
+                        .filter((t) => !(t.libelletype || '').toLowerCase().includes('dernières entrées'))
+                        .map((t) => (
+                          <option key={t.id} value={t.id}>{t.libelletype ?? t.id}</option>
+                        ))}
                     </select>
                     {values.typecommandeId !== 0 && (
                       <div className="form-text text-muted fst-italic mt-1">
@@ -175,11 +212,12 @@ export default function CommandeModal({
                     <>
                       <div className="mb-3">
                         <label className="form-label">Date de début <i className="fa fa-info-circle text-info ms-1"></i></label>
-                        <input type="datetime-local" className="form-control" name="datedebut" value={values.datedebut ?? ''} onChange={handleChange} />
+                        <input type="datetime-local" className={`form-control ${debutAfterFin ? 'is-invalid' : ''}`} name="datedebut" value={values.datedebut ?? ''} onChange={handleChange} />
+                        {debutAfterFin && <div className="invalid-feedback">La date de début doit être inférieure ou égale à la date de fin.</div>}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Date de fin <i className="fa fa-info-circle text-info ms-1"></i></label>
-                        <input type="datetime-local" className="form-control" name="datefin" value={values.datefin ?? ''} onChange={handleChange} />
+                        <input type="datetime-local" className={`form-control ${debutAfterFin ? 'is-invalid' : ''}`} name="datefin" value={values.datefin ?? ''} onChange={handleChange} />
                       </div>
                     </>
                   )}
@@ -278,7 +316,7 @@ export default function CommandeModal({
             </div>
             <div className="modal-footer bg-light" style={{ flex: '0 0 auto' }}>
               <button type="button" className="btn btn-alt-secondary" onClick={onClose} disabled={!!submitting}>Annuler</button>
-              <button type="submit" className="btn btn-primary" disabled={!!submitting}>
+              <button type="submit" className="btn btn-primary" disabled={!!submitting || hasValidationError}>
                 <i className="fa fa-paper-plane me-1"></i> {submitting ? 'Enregistrement...' : 'Enregistrer la commande'}
               </button>
             </div>

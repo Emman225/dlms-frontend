@@ -162,11 +162,6 @@ export default function EquipementsList() {
     }
   }
 
-  const onAssociate = (e: Equipement) => {
-    setAssociatingEquipement(e)
-    setShowAssociateModal(true)
-  }
-
   const handleAssociateSave = async (newCelluleIds: number[]) => {
     if (!associatingEquipement) return
     try {
@@ -215,11 +210,6 @@ export default function EquipementsList() {
     } finally {
       setAssociateSubmitting(false)
     }
-  }
-
-  const onDissociate = (e: any) => {
-    setAssociatingEquipement(e)
-    setShowAssociateModal(true)
   }
 
   const columns = useMemo<Column<any>[]>(() => [
@@ -305,7 +295,7 @@ export default function EquipementsList() {
           if (nested) return nested
 
           // 2. Try direct cellule label fields
-          const direct = obj?.celluleLibelle || obj?.libelleCellule || obj?.LibelleCellule || obj?.CelluleLibelle || obj?.libelle
+          const direct = obj?.celluleLibelle || obj?.libelleCellule || obj?.LibelleCellule || obj?.CelluleLibelle
           if (typeof direct === 'string' && direct) return direct
 
           // 3. Try lookup by ID
@@ -327,7 +317,7 @@ export default function EquipementsList() {
           if (directName) names.add(directName)
           if (Array.isArray(r.cellules)) {
             r.cellules.forEach((c: any) => {
-              const name = extractCelluleName(c)
+              const name = extractCelluleName(c) || c?.libelle || c?.nom
               if (name) names.add(name)
             })
           }
@@ -368,20 +358,8 @@ export default function EquipementsList() {
               rows={rows}
               loading={loading}
               actions={(e: any) => {
-                const assocs = serverAssociations[e.id] || []
-                const isAssociated = assocs.length > 0
-
                 return (
                   <>
-                    {!isAssociated ? (
-                      <button className="btn btn-sm btn-alt-info" onClick={() => onAssociate(e)} title="Associer des cellules">
-                        <i className="fa-solid fa-link"></i>
-                      </button>
-                    ) : (
-                      <button className="btn btn-sm btn-alt-danger" onClick={() => onDissociate(e)} title="Dissocier cellules">
-                        <i className="fa-solid fa-link-slash"></i>
-                      </button>
-                    )}
                     {hasPermission('Modifier un équipement') && (
                       <button className="btn btn-sm btn-alt-secondary" onClick={() => onEdit(e)} title="Editer">
                         <i className="fa-solid fa-pen"></i>

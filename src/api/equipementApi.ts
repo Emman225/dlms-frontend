@@ -44,7 +44,7 @@ export const equipementApi = {
     serialPort: string
     datePremierePose: string
     datePoseActuelle: string
-    posteId: number
+    posteId?: number
     celluleId?: number
     createdBy: string
   }) {
@@ -64,7 +64,7 @@ export const equipementApi = {
     serialPort: string
     datePremierePose: string
     datePoseActuelle: string
-    posteId: number
+    posteId?: number
     celluleId?: number
     updatedBy: string
   }) {

@@ -61,13 +61,20 @@ export default function DataTable<T extends Record<string, any>>({ columns, rows
   const filtered = useMemo(() => {
     if (!deferredQ) return rows
     const query = deferredQ.toLowerCase()
+
+    // Recursive text extraction with depth limit for performance
+    const extractText = (val: any, depth: number): string => {
+      if (val === null || val === undefined) return ''
+      if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') return String(val)
+      if (depth <= 0) return ''
+      if (Array.isArray(val)) return val.map(v => extractText(v, depth - 1)).join(' ')
+      if (typeof val === 'object') return Object.values(val).map(v => extractText(v, depth - 1)).join(' ')
+      return ''
+    }
+
     return rows.filter((r) => {
-      // Optimized search: only check string/number values
-      return Object.entries(r).some(([, val]) => {
-        if (val === null || val === undefined) return false
-        if (typeof val === 'object') return false // Skip complex objects for performance
-        return String(val).toLowerCase().includes(query)
-      })
+      const rowText = extractText(r, 3).toLowerCase()
+      return rowText.includes(query)
     })
   }, [rows, deferredQ])
 

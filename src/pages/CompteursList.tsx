@@ -9,6 +9,10 @@ import { authService } from '../services/authService'
 import { fabricantService } from '../services/fabricantService'
 import { equipementService } from '../services/equipementService'
 import { compteurEquipementApi } from '../api/compteurEquipementApi'
+import { compteurCelluleApi } from '../api/compteurCelluleApi'
+import { celluleService } from '../services/celluleService'
+import { posteService } from '../services/posteService'
+import AssociateCelluleToCompteurModal from '../components/compteurs/AssociateCelluleToCompteurModal'
 import api from '../api/apiClient'
 import { usePermissions } from '../context/PermissionContext'
 
@@ -40,21 +44,19 @@ export default function CompteursList() {
     typecommandeId: 0,
   })
   const [equipements, setEquipements] = useState<Array<any>>([])
+  const [postes, setPostes] = useState<Array<{ id: number; libelle: string }>>([])
   const [showAssociateModal, setShowAssociateModal] = useState(false)
   const [associatingCompteur, setAssociatingCompteur] = useState<Compteur | null>(null)
   const [selectedEquipementId, setSelectedEquipementId] = useState<number>(0)
   const [associateSubmitting, setAssociateSubmitting] = useState(false)
-  const [localAssociations, setLocalAssociations] = useState<Record<number, { id: number; libelle: string; adresseIp?: string }>>(() => {
-    try {
-      const saved = localStorage.getItem('dlms_compteur_equipements');
-      return saved ? JSON.parse(saved) : {};
-    } catch (_) { return {}; }
-  })
+  // State for cellule associations
+  const [cellules, setCellules] = useState<Array<any>>([])
+  const [showCelluleModal, setShowCelluleModal] = useState(false)
+  const [associatingCelluleCompteur, setAssociatingCelluleCompteur] = useState<Compteur | null>(null)
+  const [celluleAssocSubmitting, setCelluleAssocSubmitting] = useState(false)
 
-  // Persist local associations to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('dlms_compteur_equipements', JSON.stringify(localAssociations));
-  }, [localAssociations])
+  // In-memory only: used for immediate visual feedback after association, cleared when server data arrives
+  const [localAssociations, setLocalAssociations] = useState<Record<number, { id: number; libelle: string; adresseIp?: string }>>({})
 
   const loadList = async () => {
     setLoading(true)
@@ -76,6 +78,8 @@ export default function CompteursList() {
       }
 
       setRows(items)
+      // Clear optimistic local associations — server data is now authoritative
+      setLocalAssociations({})
     } catch (err) {
       console.error('CompteursList: Error loading list', err)
       setRows([])
@@ -119,6 +123,29 @@ export default function CompteursList() {
     }
   }
 
+  const loadCellules = async () => {
+    try {
+      const res = await celluleService.list()
+      const data = (res?.data as any) || []
+      const items = Array.isArray(data) ? data : (data?.data ?? [])
+      setCellules(items)
+    } catch (_) {
+      setCellules([])
+    }
+  }
+
+  const loadPostes = async () => {
+    try {
+      const res = await posteService.list()
+      const data = (res?.data as any) || []
+      const items = Array.isArray(data) ? data : (data?.data ?? [])
+      const mapped = items.map((p: any) => ({ id: p.id, libelle: p.libelle ?? String(p.id) }))
+      setPostes(mapped)
+    } catch (_) {
+      setPostes([])
+    }
+  }
+
   const loadAssociations = async (compteurIds: number[], currentUserId: string) => {
     if (!currentUserId || compteurIds.length === 0) return;
 
@@ -127,7 +154,11 @@ export default function CompteursList() {
       try {
         const res = await compteurEquipementApi.getByIdCompteur(id, currentUserId);
         if (res && res.isSuccess && res.data && res.data.length > 0) {
-          return { id, data: res.data[0] };
+          // Filter out archived/soft-deleted records
+          const valid = res.data.filter((d: any) => !d.isArchive && !d.deletedAt);
+          if (valid.length > 0) {
+            return { id, data: valid[0] };
+          }
         }
       } catch (e) { /* ignore */ }
       return null;
@@ -143,11 +174,16 @@ export default function CompteursList() {
   }
 
   useEffect(() => {
+    // Clean up any stale localStorage data from previous versions
+    localStorage.removeItem('dlms_compteur_equipements');
+
     // Parallelize loads without blocking initial render with Promise.all
     loadList();
     loadFabricants();
     loadTypecommandes();
     loadEquipements();
+    loadCellules();
+    loadPostes();
 
     (async () => {
       try {
@@ -414,6 +450,103 @@ export default function CompteursList() {
   }
 
 
+  const onAssociateCellule = (c: Compteur) => {
+    setAssociatingCelluleCompteur(c)
+    setShowCelluleModal(true)
+  }
+
+  const handleCelluleAssocSave = async (celluleId: number) => {
+    if (!associatingCelluleCompteur || !celluleId) {
+      const ask = (window as any).Swal
+      const msg = 'Veuillez sélectionner une cellule'
+      ask ? ask.fire({ icon: 'warning', title: 'Attention', text: msg }) : alert(msg)
+      return
+    }
+    try {
+      setCelluleAssocSubmitting(true)
+      const payload = [{
+        compteurId: associatingCelluleCompteur.id,
+        celluleId: celluleId,
+        userId: String(userId ?? ''),
+        createdBy: String(userId ?? '')
+      }]
+      const res = await compteurCelluleApi.add(payload)
+      if (res && res.isSuccess === false) {
+        throw new Error(res.message || "L'association a échoué")
+      }
+
+      // Immediately update local row state so the button switches to "Dissocier"
+      const selectedCell = cellules.find(cl => cl.id === celluleId)
+      if (selectedCell) {
+        setRows(prev => prev.map(row => row.id === associatingCelluleCompteur.id
+          ? { ...row, cellules: [...(row.cellules || []), selectedCell] }
+          : row
+        ))
+      }
+
+      const ask = (window as any).Swal
+      ask && ask.fire({ icon: 'success', title: 'Association réussie', timer: 1500, showConfirmButton: false, didOpen: (el: HTMLElement) => { el.style.zIndex = '4000' } })
+      setShowCelluleModal(false)
+      setAssociatingCelluleCompteur(null)
+
+      // Reload from server to get authoritative data
+      await loadList()
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || "Erreur lors de l'association"
+      const ask = (window as any).Swal
+      ask ? ask.fire({ icon: 'error', title: 'Erreur', text: msg, didOpen: (el: HTMLElement) => { el.style.zIndex = '4000' } }) : alert(msg)
+    } finally {
+      setCelluleAssocSubmitting(false)
+    }
+  }
+
+  const onDissociateCellule = async (c: any) => {
+    const ask = (window as any).Swal
+    const cls = getActiveCellules(c)
+    if (cls.length === 0) {
+      const msg = "Aucune cellule associée à ce compteur."
+      ask ? ask.fire({ icon: 'info', title: 'Info', text: msg }) : alert(msg)
+      return
+    }
+    const confirm = ask
+      ? await ask.fire({
+        title: 'Êtes-vous sûr ?',
+        text: `Voulez-vous vraiment dissocier le compteur "${c.numeroCompteur}" de sa cellule ?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Oui, dissocier !',
+        cancelButtonText: 'Annuler'
+      })
+      : { isConfirmed: window.confirm(`Dissocier le compteur « ${c.numeroCompteur} » de sa cellule ?`) }
+    if (!confirm.isConfirmed) return
+
+    try {
+      setCelluleAssocSubmitting(true)
+      const payload = cls.map((cell: any) => ({
+        compteurId: c.id,
+        celluleId: cell.id,
+        userId: String(userId ?? ''),
+        deletedBy: String(userId ?? '')
+      }))
+      await compteurCelluleApi.remove(payload)
+
+      // Immediately clear cellules from local row state for instant feedback
+      setRows(prev => prev.map(row => row.id === c.id ? { ...row, cellules: [] } : row))
+
+      ask && ask.fire({ icon: 'success', title: 'Dissocié', timer: 1200, showConfirmButton: false })
+
+      // Reload from server to get authoritative data
+      await loadList()
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'Erreur lors de la dissociation'
+      ask ? ask.fire({ icon: 'error', title: 'Erreur', text: msg }) : alert(msg)
+    } finally {
+      setCelluleAssocSubmitting(false)
+    }
+  }
+
   const allSelected = useMemo(() => rows.length > 0 && rows.every((r: any) => !!selected[r.idCompteur]), [rows, selected])
 
   const toggleAll = () => {
@@ -497,6 +630,10 @@ export default function CompteursList() {
     }
   }
 
+  // Helper: get cellules from row data
+  const getActiveCellules = (r: any): any[] =>
+    (r.cellules as any[] | undefined) || []
+
   const columns = useMemo<Column<any>[]>(() => [
     {
       key: '_select',
@@ -525,9 +662,22 @@ export default function CompteursList() {
     { key: 'datePremierePose', title: "DATE D'INSCRIPTION", render: (r) => (r.datePremierePose ? String(r.datePremierePose).substring(0, 10) : '—') },
     {
       key: 'posteLibelle', title: 'POSTE', render: (r) => {
-        const cls = r.cellules as any[] | undefined
-        if (cls && cls.length > 0) {
-          const names = [...new Set(cls.map(c => c.poste?.libelle).filter(Boolean))]
+        const extractPosteName = (obj: any) => {
+          if (!obj) return null
+          const nested = obj?.poste?.libelle || obj?.poste?.nom || obj?.poste?.Libelle
+          if (nested) return nested
+          const direct = obj?.posteLibelle || obj?.libellePoste || obj?.PosteLibelle || obj?.LibellePoste
+          if (typeof direct === 'string' && direct) return direct
+          const pId = obj?.posteId || obj?.idPoste || obj?.PosteId || (obj?.poste && typeof obj.poste !== 'object' ? obj.poste : null)
+          if (pId) {
+            const found = postes.find(p => String(p.id) === String(pId))
+            if (found?.libelle) return found.libelle
+          }
+          return null
+        }
+        const cls = getActiveCellules(r)
+        if (cls.length > 0) {
+          const names = [...new Set(cls.map(c => extractPosteName(c)).filter(Boolean))]
           return names.length > 0 ? names.join(', ') : '—'
         }
         return '—'
@@ -535,8 +685,8 @@ export default function CompteursList() {
     },
     {
       key: 'celluleLibelle', title: 'CELLULE', render: (r) => {
-        const cls = r.cellules as any[] | undefined
-        if (cls && cls.length > 0) {
+        const cls = getActiveCellules(r)
+        if (cls.length > 0) {
           const names = cls.map(c => c.libelle).filter(Boolean)
           return names.length > 0 ? names.join(', ') : '—'
         }
@@ -545,8 +695,8 @@ export default function CompteursList() {
     },
     {
       key: 'celluleType', title: 'TYPE', render: (r) => {
-        const cls = r.cellules as any[] | undefined
-        if (cls && cls.length > 0) {
+        const cls = getActiveCellules(r)
+        if (cls.length > 0) {
           const types = cls.map(c => c.type).filter((t: any) => t != null && t !== '')
           return types.length > 0 ? types.join(', ') : '—'
         }
@@ -555,8 +705,8 @@ export default function CompteursList() {
     },
     {
       key: 'celluleValeurTension', title: 'TENSION', render: (r) => {
-        const cls = r.cellules as any[] | undefined
-        if (cls && cls.length > 0) {
+        const cls = getActiveCellules(r)
+        if (cls.length > 0) {
           const vals = cls.map(c => c.valeurTension).filter((v: any) => v != null && v !== '' && v !== '0')
           return vals.length > 0 ? vals.join(', ') : '—'
         }
@@ -629,7 +779,7 @@ export default function CompteursList() {
 
 
 
-  ], [allSelected, selected, fabricants, localAssociations, serverAssociations, equipements])
+  ], [allSelected, selected, fabricants, localAssociations, serverAssociations, equipements, postes])
 
   return (
     <MainLayout fullWidth={true}>
@@ -667,9 +817,17 @@ export default function CompteursList() {
                 actions={(c: any) => {
                   const hasLocal = !!localAssociations[c.id];
                   const hasServer = !!serverAssociations[c.id];
-                  const hasAssocObj = (c.compteurEquipements && c.compteurEquipements.length > 0) || c.compteurEquipement || c.equipement || c.CompteurEquipement || (c.CompteurEquipements && c.CompteurEquipements.length > 0);
+                  // Filter out archived/soft-deleted associations from row data
+                  const activeEquipAssocs = (c.compteurEquipements || c.CompteurEquipements || []).filter((a: any) => !a.isArchive && !a.deletedAt);
+                  const hasAssocObj = activeEquipAssocs.length > 0 ||
+                    (c.compteurEquipement && !c.compteurEquipement.isArchive && !c.compteurEquipement.deletedAt) ||
+                    (c.CompteurEquipement && !c.CompteurEquipement.isArchive && !c.CompteurEquipement.deletedAt) ||
+                    (c.equipement && !c.equipement.isArchive && !c.equipement.deletedAt);
                   const hasAssocId = c.equipementId || c.idEquipement || (hasAssocObj && (hasAssocObj.equipementId || hasAssocObj.idEquipement || (hasAssocObj.id && hasAssocObj.id !== c.id)));
                   const isAssociated = hasLocal || hasServer || !!(hasAssocObj || hasAssocId || c.equipementName || c.equipementLibelle || c.libelleEquipement);
+
+                  const activeCellules = getActiveCellules(c)
+                  const isCelluleAssociated = activeCellules.length > 0
 
                   return (
                     <>
@@ -694,6 +852,24 @@ export default function CompteursList() {
                             <i className="fa-solid fa-link-slash"></i>
                           </button>
                         )
+                      )}
+                      {!isCelluleAssociated ? (
+                        <button
+                          className="btn btn-sm btn-alt-success"
+                          onClick={() => onAssociateCellule(c)}
+                          title="Associer à une cellule"
+                        >
+                          <i className="fa-solid fa-plug"></i>
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-sm btn-alt-warning"
+                          onClick={() => onDissociateCellule(c)}
+                          title="Dissocier de la cellule"
+                          disabled={celluleAssocSubmitting}
+                        >
+                          <i className="fa-solid fa-plug-circle-xmark"></i>
+                        </button>
                       )}
                       {hasPermission('Modifier un compteur') && (
                         <button className="btn btn-sm btn-alt-secondary" onClick={() => onEdit(c)} title="Editer">
@@ -858,6 +1034,15 @@ export default function CompteursList() {
           </div>
         </div>
       )}
+
+      <AssociateCelluleToCompteurModal
+        show={showCelluleModal}
+        onClose={() => { setShowCelluleModal(false); setAssociatingCelluleCompteur(null) }}
+        onSave={handleCelluleAssocSave}
+        compteur={associatingCelluleCompteur}
+        cellules={cellules}
+        submitting={celluleAssocSubmitting}
+      />
     </MainLayout>
   )
 }
