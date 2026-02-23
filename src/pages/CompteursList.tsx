@@ -64,7 +64,7 @@ export default function CompteursList() {
       const res = await compteurService.list()
       const body = res?.data as any
 
-      let items = []
+      let items: any[] = []
       if (Array.isArray(body)) {
         items = body
       } else if (body && Array.isArray(body.data)) {
@@ -75,6 +75,43 @@ export default function CompteursList() {
         items = body.data.items
       } else if (body && Array.isArray(body.response)) {
         items = body.response
+      }
+
+      // The server may return soft-deleted cellule associations in the cellules array.
+      // Verify active associations via the junction endpoint for compteurs that have cellules.
+      let uid = userId
+      if (!uid) {
+        try {
+          const profile = JSON.parse(localStorage.getItem('user_profile') || '{}')
+          uid = profile.id || profile.UtilisateurId || null
+        } catch { /* ignore */ }
+      }
+      const withCellules = items.filter((c: any) => ((c.cellules as any[]) || []).length > 0)
+      if (withCellules.length > 0 && uid) {
+        const results = await Promise.allSettled(
+          withCellules.map(async (c: any) => {
+            const r = await compteurCelluleApi.getByCompteurId(c.id, String(uid))
+            const arr = Array.isArray(r) ? r : (r?.data ?? [])
+            const activeIds = new Set(
+              (arr as any[])
+                .filter((j: any) => !j.isArchive && !j.deletedAt)
+                .map((j: any) => j.celluleId ?? j.CelluleId)
+            )
+            return { compteurId: c.id, activeIds }
+          })
+        )
+        const activeMap = new Map<number, Set<number>>()
+        results.forEach((r, i) => {
+          if (r.status === 'fulfilled') {
+            activeMap.set(withCellules[i].id, r.value.activeIds)
+          }
+        })
+        items = items.map((c: any) => {
+          const activeIds = activeMap.get(c.id)
+          if (activeIds === undefined) return c
+          const cellules = ((c.cellules as any[]) || []).filter((cell: any) => activeIds.has(cell.id))
+          return { ...c, cellules }
+        })
       }
 
       setRows(items)
@@ -488,9 +525,6 @@ export default function CompteursList() {
       ask && ask.fire({ icon: 'success', title: 'Association réussie', timer: 1500, showConfirmButton: false, didOpen: (el: HTMLElement) => { el.style.zIndex = '4000' } })
       setShowCelluleModal(false)
       setAssociatingCelluleCompteur(null)
-
-      // Reload from server to get authoritative data
-      await loadList()
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || "Erreur lors de l'association"
       const ask = (window as any).Swal
@@ -532,13 +566,13 @@ export default function CompteursList() {
       }))
       await compteurCelluleApi.remove(payload)
 
-      // Immediately clear cellules from local row state for instant feedback
-      setRows(prev => prev.map(row => row.id === c.id ? { ...row, cellules: [] } : row))
+      // Update local row state: clear cellules and junction records so the button switches to "Associer"
+      setRows(prev => prev.map(row => row.id === c.id
+        ? { ...row, cellules: [], compteurCellules: [], CompteurCellules: [] }
+        : row
+      ))
 
       ask && ask.fire({ icon: 'success', title: 'Dissocié', timer: 1200, showConfirmButton: false })
-
-      // Reload from server to get authoritative data
-      await loadList()
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || 'Erreur lors de la dissociation'
       ask ? ask.fire({ icon: 'error', title: 'Erreur', text: msg }) : alert(msg)
@@ -630,9 +664,25 @@ export default function CompteursList() {
     }
   }
 
-  // Helper: get cellules from row data
-  const getActiveCellules = (r: any): any[] =>
-    (r.cellules as any[] | undefined) || []
+  // Helper: get active cellules from row data (filter out soft-deleted/archived associations)
+  const getActiveCellules = (r: any): any[] => {
+    // Check junction table records if available to determine active associations
+    const junctionRecords = r.compteurCellules || r.CompteurCellules || []
+    if (junctionRecords.length > 0) {
+      // Use junction records: only keep cellules whose junction entry is active
+      const activeCelluleIds = new Set(
+        junctionRecords
+          .filter((j: any) => !j.isArchive && !j.deletedAt)
+          .map((j: any) => j.celluleId ?? j.CelluleId)
+      )
+      if (activeCelluleIds.size === 0) return []
+      const raw = (r.cellules as any[] | undefined) || []
+      return raw.filter((c: any) => activeCelluleIds.has(c.id))
+    }
+    // Fallback: filter directly on cellule objects
+    const raw = (r.cellules as any[] | undefined) || []
+    return raw.filter((c: any) => !c.isArchive && !c.deletedAt)
+  }
 
   const columns = useMemo<Column<any>[]>(() => [
     {
