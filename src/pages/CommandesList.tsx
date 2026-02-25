@@ -23,12 +23,34 @@ export default function CommandesList() {
   const [types, setTypes] = useState<Array<{ id: number; libelletype: string }>>([])
   const [compteurs, setCompteurs] = useState<Array<{ id: number; numeroCompteur?: string; idCompteur?: string }>>([])
 
-  const loadList = async () => {
+  const loadList = async (compteursList?: Array<{ id: number; numeroCompteur?: string }>) => {
     setLoading(true)
     try {
       const res = await commandeService.list()
       const data = (res?.data as any) || []
       const items = Array.isArray(data) ? data : (data?.data ?? [])
+
+      const nc = new URL(window.location.href).searchParams.get('numeroCompteur') || ''
+      const cptrs = compteursList ?? compteurs
+
+      if (nc && cptrs.length > 0) {
+        const matched = cptrs.find(c => c.numeroCompteur === nc)
+        if (matched) {
+          const cId = matched.id
+          const details = await Promise.all(
+            items.map((item: any) => commandeApi.getById(item.id).catch(() => null))
+          )
+          const filtered = items.filter((_: any, i: number) => {
+            const d = details[i]
+            const cmd = d?.isSuccess !== undefined ? d.data : d
+            const cc = cmd?.commandeCompteur
+            return Array.isArray(cc) && cc.some((x: any) => x.compteurId === cId)
+          })
+          setRows(filtered)
+          return
+        }
+      }
+
       setRows(items)
     } catch (_) {
       setRows([])
@@ -70,7 +92,11 @@ export default function CommandesList() {
 
   useEffect(() => {
     ; (async () => {
-      await Promise.all([loadList(), loadTypes(), loadCompteurs()])
+      const [, , compteursRes] = await Promise.all([loadTypes(), loadCompteurs(), compteurApi.list().catch(() => ({ data: [] }))])
+      const cData = (compteursRes?.data as any) ?? []
+      const cArr = Array.isArray(cData) ? cData : (cData?.data ?? [])
+      const mappedCptrs = cArr.map((c: any) => ({ id: c.id, numeroCompteur: c.numeroCompteur }))
+      await loadList(mappedCptrs)
       try {
         const me = await authService.getCurrent()
         const u = (me?.data as any)?.data ?? me?.data
@@ -209,7 +235,7 @@ export default function CommandesList() {
         )}
         <div className="block block-rounded">
           <div className="block-header block-header-default">
-            <h3 className="block-title">Liste commandes</h3>
+            <h3 className="block-title">Liste commandes{numeroCompteur ? ` — Compteur ${numeroCompteur}` : ''}</h3>
             <div className="block-options">
               {hasPermission('Créer une commande') && (
                 <button className="btn btn-sm btn-success" onClick={onNew}>

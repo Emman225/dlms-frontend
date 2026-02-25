@@ -1,9 +1,19 @@
 import api from './apiClient'
 
+export type EventInfo = {
+  id: number
+  category: string
+  code1: string
+  value: number
+  bitMask: boolean
+  code2: string
+}
+
 export type ProfilDetailItem = {
   id: number
   codeObisId: number
   gxdlmsprofilgenericId: number
+  eventId: number | null
   value: string
   numeroCompteur: string
   dateEnr: string
@@ -16,6 +26,20 @@ export type ProfilDetailItem = {
     code2: string
     unit: string | null
   }
+  gxdlmsprofilgeneric?: {
+    id: number
+    codeObisId: number
+    isArchive: boolean
+    codeobis?: {
+      id: number
+      category: string
+      code1: string
+      value: string
+      code2: string
+      unit: string | null
+    }
+  }
+  event?: EventInfo | null
 }
 
 export type ApiResult<T> = {
@@ -46,9 +70,9 @@ export const gxdlmsApi = {
     const { data } = await api.post<ApiResult<ProfilDetailItem[]>>('/Gxdlmsprofilgeneric/profilgenericdetailByMultipleCriteria', params)
     return data
   },
-  // GET /Gxdlmsprofilgeneric/profilgenericEventsByStatus?NumeroCompteur=...
-  async profilEventsByStatus(params: { numeroCompteur: string }) {
-    const { data } = await api.get<ApiResult<ProfilDetailItem[]>>('/Gxdlmsprofilgeneric/profilgenericEventsByStatus', { params })
+  // GET /Gxdlmsprofilgeneric/profilgenericdetailseventByStatus?NumeroCompteur=...&UserId=...
+  async profilEventsByStatus(params: { numeroCompteur: string; UserId?: string }) {
+    const { data } = await api.get<ApiResult<ProfilDetailItem[]>>('/Gxdlmsprofilgeneric/profilgenericdetailseventByStatus', { params })
     return data
   },
 }
